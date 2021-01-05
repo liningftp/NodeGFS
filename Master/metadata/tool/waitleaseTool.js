@@ -15,7 +15,7 @@
 
 // REQUIRE_START [default]
 // START
-const DURATION = 60000; // 1分钟
+const DURATION = 60000; // 60s
 // END
 // REQUIRE_END
 

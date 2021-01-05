@@ -1,6 +1,6 @@
 
-// 存放服务器数量不足的块列表
-// 格式 -> [添加时间, 执行修复时间]
+// store chunk is loss replica
+// format -> [joinTime, repairTime]
 
 /**
 {"aabbccdd":[1599701518196,1603841772044],"eeffgghh":[1599701518196,0],"ooxxkkmm":[1603842910809,0]}

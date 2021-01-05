@@ -38,7 +38,7 @@ exports.secondPushData = async function( secondServerList, cacheKey, contentData
   let body = contentData;
   // SOCKET_API OPEN [GFS2_Chunkserver.handler.secondPushData] {tabCount=1}
   /* primay push data to secondary */
-  /* @return {Array} 返回值 [{"code":0, "data":10}] */
+  /* @return {Array} return value [{"code":0, "data":10}] */
   [result, bigData] = await comm.clientRequest(host, port, 
     comm.encodeMessageData({
       "method": "secondPushData",
@@ -61,7 +61,7 @@ exports.secondPushData = async function( secondServerList, cacheKey, contentData
  * @secondServerList {Array}  list of secondary chunkservers, @example ["127.0.0.1:3002", "127.0.0.1:3003"]
  * @chunkName        {String} name of chunk, @example "ad4e67f0b01f550d9e9c33e548ce971b2e2112ae3c695af3b01ba3639268375b"
  * @version          {Number} version number, @example 66
- * @return           {Array}  返回值, @example [{"code":0}]
+ * @return           {Array}  return value, @example [{"code":0}]
  */
 exports.secondCreateChunk = async function( secondServerList, chunkName, version ){
 // START
@@ -74,7 +74,7 @@ exports.secondCreateChunk = async function( secondServerList, chunkName, version
 
   // SOCKET_API OPEN [GFS2_Chunkserver.handler.secondCreateChunk] {tabCount=1}
   /* create a empty chunk */
-  /* @return {Array} 返回值 [{"code":0}] */
+  /* @return {Array} return value [{"code":0}] */
   [result, bigData] = await comm.clientRequest(host, port, 
     comm.encodeMessageData({
       "method": "secondCreateChunk",
@@ -111,7 +111,7 @@ exports.secondWrite = async function( secondServerList, cacheKey, chunkName, sta
   let [host, port] = secondServerList.shift().split(':');
   // SOCKET_API OPEN [GFS2_Chunkserver.handler.secondWrite] {tabCount=1}
   /* write content data according to primary */
-  /* @return {Array} 返回值 [{"code":0, "data":10}] */
+  /* @return {Array} return value [{"code":0, "data":10}] */
   [result, bigData] = await comm.clientRequest(host, port, 
     comm.encodeMessageData({
       "method": "secondWrite",
@@ -139,7 +139,7 @@ exports.secondWrite = async function( secondServerList, cacheKey, chunkName, sta
  * @cacheKey         {String} key of cache, @example "key123456"
  * @privSize         {Number} size of previous chunk, @example 5
  * @version          {Number} version number, @example 2
- * @return           {JSON}   返回值, @example {"code":0, "data":{"maxSize":10}
+ * @return           {JSON}   return value, @example {"code":0, "data":{"maxSize":10}
  */
 exports.secondGuarantee = async function( secondServerList, chunkName, cacheKey, privSize, version ){
 // START
@@ -151,7 +151,7 @@ exports.secondGuarantee = async function( secondServerList, chunkName, cacheKey,
   let [host, port] = secondServerList.shift().split(':');
   // SOCKET_API OPEN [GFS2_Chunkserver.handler.secondGuarantee] {tabCount=1}
   /* guaranteeing size of all replica are same */
-  /* @return {Array} 返回值 [{"code":0, "data":{"maxSize":10}}] */
+  /* @return {Array} return value [{"code":0, "data":{"maxSize":10}}] */
   [result, bigData] = await comm.clientRequest(host, port, 
     comm.encodeMessageData({
       "method": "secondGuarantee",
@@ -177,7 +177,7 @@ exports.secondGuarantee = async function( secondServerList, chunkName, cacheKey,
  * @secondServerList {Array}  list of secondary chunkservers, @example ["127.0.0.1:3002", "127.0.0.1:3003"]
  * @chunkName        {String} name of chunk, @example "aabbccdd"
  * @targetSize       {Number} the target size to padding to, @example 65536
- * @return           {Array}  返回值, @example [{"code":0, "msg":""}]
+ * @return           {Array}  return value, @example [{"code":0, "msg":""}]
  */
 exports.secondPadding = async function( secondServerList, chunkName, targetSize ){
 // START
@@ -189,7 +189,7 @@ exports.secondPadding = async function( secondServerList, chunkName, targetSize 
   let [host, port] = secondServerList.shift().split(':');
   // SOCKET_API OPEN [GFS2_Chunkserver.handler.secondPadding] {tabCount=1}
   /* padding chunk to target size with "0" */
-  /* @return {Array} 返回值 [{"code":0, "msg":""}] */
+  /* @return {Array} return value [{"code":0, "msg":""}] */
   [result, bigData] = await comm.clientRequest(host, port, 
     comm.encodeMessageData({
       "method": "secondPadding",
@@ -224,7 +224,7 @@ exports.secondAppend = async function( secondServerList, cacheKey, chunkName ){
   let [host, port] = secondServerList.shift().split(':');
   // SOCKET_API OPEN [GFS2_Chunkserver.handler.secondAppend] {tabCount=1}
   /* append content data to chunk according to primary */
-  /* @return {Array} Return value [{"code":0, "data":{"startPos":0}}] */
+  /* @return {Array} return value [{"code":0, "data":{"startPos":0}}] */
   [result, bigData] = await comm.clientRequest(host, port, 
     comm.encodeMessageData({
       "method": "secondAppend",
@@ -259,7 +259,7 @@ exports.secondSetVersion = async function( secondServerList, chunkName, version 
   let [host, port] = secondServerList.shift().split(':');
   // SOCKET_API OPEN [GFS2_Chunkserver.handler.secondSetVersion] {tabCount=1}
   /* set version to secondary */
-  /* @return {Array} 返回值 [{"code":0, "msg":""}] */
+  /* @return {Array} return value [{"code":0, "msg":""}] */
   [result, bigData] = await comm.clientRequest(host, port, 
     comm.encodeMessageData({
       "method": "secondSetVersion",

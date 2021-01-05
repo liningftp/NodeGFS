@@ -2,35 +2,32 @@
 const fs = require("fs");
 const child_process = require("child_process");
 
-// 后面会重复加载，这里不能使用const声明
-let chunkversionFreeTool = require("C:\\work\\GFS2\\Chunkserver\\metadata\\tool\\chunkversionFreeTool.js");
+let chunkversionFreeTool = require("C:\\work\\Git_work\\NodeGFS\\Chunkserver\\metadata\\tool\\chunkversionFreeTool.js");
 
 
 ////////////////////////////////////////////////////////////////////////////////
 
-// 重新载入模块
 function reload(){
-	delete require.cache[require.resolve("C:\\work\\GFS2\\Chunkserver\\metadata\\tool\\chunkversionFreeTool.js")]
-	chunkversionFreeTool = require("C:\\work\\GFS2\\Chunkserver\\metadata\\tool\\chunkversionFreeTool.js");
+  delete require.cache[require.resolve("C:\\work\\Git_work\\NodeGFS\\Chunkserver\\metadata\\tool\\chunkversionFreeTool.js")]
+  chunkversionFreeTool = require("C:\\work\\Git_work\\NodeGFS\\Chunkserver\\metadata\\tool\\chunkversionFreeTool.js");
 }
 
 
-// 创建子进程服务器端
 async function forkServer(forkFile, startParam){
-	var child = child_process.fork(forkFile);
+  var child = child_process.fork(forkFile);
 
-	return	new Promise( (resolve, reject) => {
-		child.on("message", (result) => {
-			if("onload" == result.state){
-				child.send(startParam);
-			}
-			else if("started" == result.state){
-				resolve(child);
-			}
-			else{
-			}
-		});
-	});
+  return  new Promise( (resolve, reject) => {
+    child.on("message", (result) => {
+      if("onload" == result.state){
+        child.send(startParam);
+      }
+      else if("started" == result.state){
+        resolve(child);
+      }
+      else{
+      }
+    });
+  });
 
 }
 
@@ -40,12 +37,12 @@ async function forkServer(forkFile, startParam){
 // get free index
 exports.getFreeIndex = function(){
 // START
-	reload();
-	// 执行业务逻辑
-	var chunkversionFreeData = [2, 3]
-	var result = chunkversionFreeTool.getFreeIndex(chunkversionFreeData);
+  reload();
+  // run
+  var chunkversionFreeData = [2, 3]
+  var result = chunkversionFreeTool.getFreeIndex(chunkversionFreeData);
 
-	return result;
+  return result;
 // END
 };
 
@@ -53,13 +50,13 @@ exports.getFreeIndex = function(){
 // delete free index
 exports.delete = function(){
 // START
-	reload();
-	// 执行业务逻辑
-	var chunkversionFreeData = [2, 3]
-	var freeIndex = 2;
-	var result = chunkversionFreeTool.delete(chunkversionFreeData, freeIndex);
+  reload();
+  // run
+  var chunkversionFreeData = [2, 3]
+  var freeIndex = 2;
+  var result = chunkversionFreeTool.delete(chunkversionFreeData, freeIndex);
 
-	return result;
+  return result;
 // END
 };
 
@@ -67,12 +64,12 @@ exports.delete = function(){
 // add free index
 exports.add = function(){
 // START
-	reload();
-	// 执行业务逻辑
-	var chunkversionFreeData = []
-	var freeIndex = 1;
-	var result = chunkversionFreeTool.add(chunkversionFreeData, freeIndex);
+  reload();
+  // run
+  var chunkversionFreeData = []
+  var freeIndex = 1;
+  var result = chunkversionFreeTool.add(chunkversionFreeData, freeIndex);
 
-	return result;
+  return result;
 // END
 };

@@ -24,26 +24,20 @@ scheduleRule.second = [1, 6, 11, 16, 21, 26, 31, 36, 41, 46, 51, 56];
 // scheduleRule.minute = [1,6,11,16,21,26,31,36,41,46,51,56];
 // scheduleRule.hour = [1,5,9,13,17,21];
 
-// 状态标志
 const state = {};
 
-// 绑定主线程通讯接口
 process.on('message', (message) => {
   let {flag} = message;
 
-  // 主线程触发启动
   if('start' == flag){
-    // 启动crontab
     schedule.scheduleJob(scheduleRule, () => {
       if(!state.working){
-        // 向主进程请求上报数据
         process.send({
           'flag': 'getMainData',
         });
       }
     });
   }
-  // 主线程返回需要上报到Master的数据
   else if('getMainData' == flag){
     let {serverData, heartbeatTime} = message;
     state.working = true;
@@ -69,7 +63,6 @@ exports._start = function( serverData, heartbeatTime, timestamp ){
   let maxAliveTime = 1.2 * heartbeatTime;
   let list = serverdataTool.getExpireList(serverData, maxAliveTime, timestamp);
 
-  // 执行告警，让人工参与修复服务器失联问题
   // TODO
 
   return list;

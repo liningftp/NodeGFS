@@ -1,8 +1,8 @@
 
-// 块信息是在chunkserver启动时上报过来，不需要持久化保存
-// 格式: 引用数, 版本号, 副本数量, primary, secondary, secondary, ..
-//   注: parimary->IP:Port,Version,Primary/Secondary,Timestamp(分配租约时的时间戳)
-//   注: second->IP:Port,Version
+// store chunk data
+// format: referCount, version, replicaCount, primary, secondary, secondary, ..
+//   parimary->IP:Port,Version,Primary/Secondary,Timestamp(set lease time)
+//   second->IP:Port,Version
 const metadata = {
   // 'ab83e19265655130b208def31e0c483ecb835a24a9a7508eaec0df0e62e65870': [
   //   1, 20, '127.0.0.1:3001,1585471730177,P', '127.0.0.1:3002,1600081036080', '127.0.0.1:3003,1600081059277'

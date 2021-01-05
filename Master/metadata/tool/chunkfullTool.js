@@ -15,14 +15,14 @@
 
 // REQUIRE_START [default]
 // START
-const DURATION = 300000; // 5分钟
+const DURATION = 300000;
 // END
 // REQUIRE_END
 
 
 // PUBLIC_METHOD_START [add]
 /**
- * 添加填满块的信息
+ * add chunk is fulled
  * @chunkfullData {JSON}   full filled of chunk, @example {}
  * @chunkName     {String} name of chunk, @example "aabbccdd"
  * @timestamp     {Number} time stamp, @example 1603201500764
@@ -39,7 +39,7 @@ exports.add = function( chunkfullData, chunkName, timestamp ){
 
 // PUBLIC_METHOD_START [isFull]
 /**
- * 指定的块是否为满块
+ * chunk is full or not
  * @chunkfullData {JSON}   full filled of chunk, @example {"aabbccdd":1603201500764}
  * @chunkName     {String} name of chunk, @example "aabbccdd"
  */
@@ -53,7 +53,7 @@ exports.isFull = function( chunkfullData, chunkName ){
 
 // PUBLIC_METHOD_START [delete]
 /**
- * 删除指定的块
+ * delete chunk
  * @chunkfullData {JSON}   full filled of chunk, @example {"aabbccdd":1603201500764}
  * @chunkName     {String} name of chunk, @example "aabbccdd"
  */
@@ -67,7 +67,7 @@ exports.delete = function( chunkfullData, chunkName ){
 
 // PUBLIC_METHOD_START [clear]
 /**
- * 清除过时块
+ * clear expire
  * @chunkfullData {JSON}   full filled of chunk, @example {"aabbccdd":1603201500764}
  * @timestamp     {Number} time stamp, @example 1603202299410
  */

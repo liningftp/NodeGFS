@@ -47,12 +47,11 @@ const lauchOrder = require('./lauchOrder.js');
 exports.start = async function( namespaceDeleteData, file2chunkDeleteData, chunkData, serverData, retainTime, heartbeatTime, chunkDeadTime ){
 // START
 
-  // 1 创建GC子进程
-  let gcWorker = child_process.fork( path.join(__dirname, './process/gcProcess.js') );
-  // 监听子进程
-  gcWorker.on('message', message => {
+  // 1 gc sub process
+  let gcProcess = child_process.fork( path.join(__dirname, './process/gcProcess.js') );
+  gcProcess.on('message', message => {
     if('getMainData' == message.flag){
-      gcWorker.send({
+      gcProcess.send({
         'flag': 'getMainData',
         namespaceDeleteData,
         retainTime
@@ -63,40 +62,35 @@ exports.start = async function( namespaceDeleteData, file2chunkDeleteData, chunk
       exports._reclaim(namespaceDeleteData, file2chunkDeleteData, chunkData, expireList);
     }
   });
-  // 启动子进程
-  gcWorker.send({ 'flag':'start' });
+  gcProcess.send({ 'flag':'start' });
 
-  // 2 创建块服务器监控子进程（只做告警，修复转人工）
-  let serverWorker = child_process.fork( path.join(__dirname, './process/serverProcess.js') );
-  // 监听子进程
-  serverWorker.on('message', message => {
+  // 2 server sub process
+  let serverProcess = child_process.fork( path.join(__dirname, './process/serverProcess.js') );
+  serverProcess.on('message', message => {
     if('getMainData' == message.flag){
-      serverWorker.send({
+      serverProcess.send({
         'flag': 'getMainData',
         serverData,
         heartbeatTime
       });
     }
   });
-  // 启动子进程
-  serverWorker.send({ 'flag':'start' });
+  serverProcess.send({ 'flag':'start' });
 
 
-  // // 3 快照子进程
-  // let snapshotWorker = child_process.fork( path.join(__dirname, './process/snapshotProcess.js') );
-  // // 监听子进程
-  // snapshotWorker.on('message', message => {
+  // // 3 snapshot sub process
+  // let snapshotProcess = child_process.fork( path.join(__dirname, './process/snapshotProcess.js') );
+  // snapshotProcess.on('message', message => {
   //   let {flag} = message;
   //   if('getMainData' == flag){
-  //     snapshotWorker.send({
+  //     snapshotProcess.send({
   //       'flag': 'getMainData',
   //       chunkData,
   //       serverData
   //     });
   //   }
   // });
-  // // 启动子进程
-  // snapshotWorker.send({
+  // snapshotProcess.send({
   //   'flag':'start'
   // });
 
@@ -118,14 +112,10 @@ exports._reclaim = function( namespaceDeleteData, file2chunkDeleteData, chunkDat
 
   for(const [filePath, tmList] of expireList){
     for(const tm of tmList){
-      // 获取待删除块
       let chunkNameList = file2chunkDeleteTool.get(file2chunkDeleteData, filePath, tm);
 
-      // 删除命名空间
       namespaceDeleteTool.delete(namespaceDeleteData, filePath, tm);
-      // 删除文件到块映射数据
       file2chunkDeleteTool.delete(file2chunkDeleteData, filePath, tm);
-      // 删除块数据
       chunkdataTool.delete(chunkData, chunkNameList);
     }
   }

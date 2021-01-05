@@ -27,7 +27,7 @@ const {utilfs, clog, log, jsons} = require('../../../base');
  * @filePath            {String} file path of system, @example "/usr/data/001"
  * @timestamp           {Number} time stamp, @example 1599188987628
  * @tree                {JSON}   tree, @example {"/usr":{"_type":"dir","_lock":{"r":[],"w":[]},"/data":{"_type":"dir","_lock":{"r":[],"w":[]},"/001":{"_type":"file","_lock":{"r":[],"w":[]}},"/002":{"_type":"file","_lock":{"r":[],"w":[]}}},"/photo":{"_type":"dir","_lock":{"r":[],"w":[]},"/2020":{"_type":"file","_lock":{"r":[],"w":[]}}}}}
- * @return              {JSON}   返回值, @example {}
+ * @return              {JSON}   return value, @example {}
  */
 exports.add = function( namespaceDeleteData, filePath, timestamp, tree ){
 // START
@@ -49,7 +49,7 @@ exports.add = function( namespaceDeleteData, filePath, timestamp, tree ){
  * @namespaceDeleteData {JSON}   delete tree of namespace, @example {"/usr/data":{"1597879274447":{"/usr":{"_type":"dir","_lock":{"r":[],"w":[]},"/data":{"_type":"dir","_lock":{"r":[],"w":[]},"/001":{"_type":"file","_lock":{"r":[],"w":[]}},"/002":{"_type":"file","_lock":{"r":[],"w":[]}}},"/photo":{"_type":"dir","_lock":{"r":[],"w":[]},"/2020":{"_type":"file","_lock":{"r":[],"w":[]}}}}}}}
  * @filePath            {String} file path of system, @example "/usr/data"
  * @timestamp           {Number} time stamp, @example 1597879274447
- * @return              {JSON}   返回值, @example {}
+ * @return              {JSON}   return value, @example {}
  */
 exports.get = function( namespaceDeleteData, filePath, timestamp ){
 // START
@@ -92,7 +92,7 @@ exports.delete = function( namespaceDeleteData, filePath, timestamp ){
  * @namespaceDeleteData {JSON}   delete tree of namespace, @example {"/usr/data":{"1597879274447":{"/usr":{"_type":"dir","_lock":{"r":[],"w":[]},"/data":{"_type":"dir","_lock":{"r":[],"w":[]},"/001":{"_type":"file","_lock":{"r":[],"w":[]}},"/002":{"_type":"file","_lock":{"r":[],"w":[]}}},"/photo":{"_type":"dir","_lock":{"r":[],"w":[]},"/2020":{"_type":"file","_lock":{"r":[],"w":[]}}}}}}}
  * @retainTime          {Number} retain time after deleted, @example 259200000
  * @timestamp           {Number} time stamp, @example 1601278486787
- * @return              {Array}  返回值, @example []
+ * @return              {Array}  return value, @example []
  */
 exports.getExpireList = function( namespaceDeleteData, retainTime, timestamp ){
 // START
@@ -101,7 +101,6 @@ exports.getExpireList = function( namespaceDeleteData, retainTime, timestamp ){
 
   for(const [filePath, tmObj] of Object.entries(namespaceDeleteData)){
     let tmList = Object.keys(tmObj).map(key => parseInt(key));
-    // 过期
     let list = tmList.filter(tm => tm + retainTime <= timestamp);
     if(list.length){
       expireList.push([filePath, list]);

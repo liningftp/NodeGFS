@@ -34,7 +34,7 @@ exports.add = function( chunkData, chunkName, version, replicaCount, serverList,
 // START
   log.args( Error(), arguments );
   if( !chunkData.hasOwnProperty(chunkName) ){
-    chunkData[chunkName] = [1, version, replicaCount]; // [引用数, 版本号, 副本数]
+    chunkData[chunkName] = [1, version, replicaCount];
     if( serverList && serverList.length && timestamp ){
       let list = serverList.map(item => `${item},${timestamp}`);
       chunkData[chunkName].push(...list);
@@ -52,7 +52,7 @@ exports.add = function( chunkData, chunkName, version, replicaCount, serverList,
  * get chunk data
  * @chunkData {JSON}   base info of all chunk on local, @example {"aabbccdd":[1,10,"127.0.0.1:3001,1585471730177","127.0.0.1:3002,1585471730177","127.0.0.1:3003,1585471730177"]}
  * @chunkName {String} name of chunk, @example "aabbccdd"
- * @return    {Array}  返回值, @example []
+ * @return    {Array}  return value, @example []
  */
 exports.get = function( chunkData, chunkName ){
 // START
@@ -70,7 +70,7 @@ exports.get = function( chunkData, chunkName ){
  * has chunkName or not
  * @chunkData {JSON}   base info of all chunk on local, @example {"aabbccdd":[1,10,"127.0.0.1:3001,1585471730177","127.0.0.1:3002,1585471730177","127.0.0.1:3003,1585471730177"]}
  * @chunkName {String} name of chunk, @example "aabbccdd"
- * @return    {Number} 返回值, @example 1
+ * @return    {Number} return value, @example 1
  */
 exports.has = function( chunkData, chunkName ){
 // START
@@ -114,7 +114,6 @@ exports.addPair = function( chunkData, chunkName, pair, timestamp ){
   log.args( Error(), arguments );
   if( chunkData[chunkName] ){
     let index = exports.findPairIndex(chunkData, chunkName, pair);
-    /* 已存在 */
     if( -1 < index){
       exports.updateTime(chunkData, chunkName, pair, timestamp);
     }
@@ -135,7 +134,7 @@ exports.addPair = function( chunkData, chunkName, pair, timestamp ){
  * @chunkData {JSON}   base info of all chunk on local, @example {"aabbccdd":[1,1,3,"127.0.0.1:3001,1602253824890","127.0.0.1:3002,1602253824890","127.0.0.1:3003,1602253824890"]}
  * @chunkName {String} name of chunk, @example "aabbccdd"
  * @pair      {String} chunkserver host and port, @example "127.0.0.1:3002"
- * @return    {Number} 返回值, @example 1
+ * @return    {Number} return value, @example 1
  */
 exports.hasPair = function( chunkData, chunkName, pair ){
 // START
@@ -183,7 +182,6 @@ exports.clearExpire = function( chunkData, chunkName, timestamp, chunkDeadTime )
   log.args( Error(), arguments );
 
   for( const [chunkName, list] of Object.entries(chunkData) ){
-    // 从后往前遍历到第3个元素
     for(let i = list.length - 1; 3 <= i; i--){
       let [pair, tm] = list[i].split(',');
       tm = parseInt(tm);
@@ -206,7 +204,7 @@ exports.clearExpire = function( chunkData, chunkName, timestamp, chunkDeadTime )
  * @chunkData {JSON}   base info of all chunk on local, @example {"aabbccdd":[1,10,3,"127.0.0.1:3001,1585471730177","127.0.0.1:3002,1585471730177","127.0.0.1:3003,1585471730177"]}
  * @chunkName {String} name of chunk, @example "aabbccdd"
  * @pair      {String} chunkserver host and port, @example "127.0.0.1:3002"
- * @return    {Number} 返回值, @example 1
+ * @return    {Number} return value, @example 1
  */
 exports.findPairIndex = function( chunkData, chunkName, pair ){
 // START
@@ -229,7 +227,7 @@ exports.findPairIndex = function( chunkData, chunkName, pair ){
  * get chunk version
  * @chunkData {JSON}   base info of all chunk on local, @example {"aabbccdd":[1,2,3,"127.0.0.1:3001,1585471730177","127.0.0.1:3002,1585471730177","127.0.0.1:3003,1585471730177"]}
  * @chunkName {String} name of chunk, @example "aabbccdd"
- * @return    {Number} 返回值, @example 2
+ * @return    {Number} return value, @example 2
  */
 exports.getVersion = function( chunkData, chunkName ){
 // START
@@ -293,12 +291,11 @@ exports.checkVersion = function( chunkData, chunkName, version ){
 /**
  * create unique chunk name
  * @chunkData {JSON}   base info of all chunk on local, @example {"aabbccdd":[1,2,3,"127.0.0.1:3001,1585471730177","127.0.0.1:3002,1585471730177","127.0.0.1:3003,1585471730177"]}
- * @return    {String} 返回值, @example aabbccdd
+ * @return    {String} return value, @example aabbccdd
  */
 exports.getNewChunkName = function( chunkData ){
 // START
   log.args( Error(), arguments );
-  // 生成新的块名，同时不能和chunkData已有的块名重复
   let chunkName;
 
   while(!chunkName){
@@ -360,26 +357,22 @@ exports.subReferCount = function( chunkData, chunkName ){
  * @chunkName {String} name of chunk, @example "aabbccdd"
  * @leaseTime {Number} time of lease, @example 60000
  * @timestamp {Number} time stamp, @example 1600247712022
- * @return    {String} 返回值, @example 127.0.0.1:3001
+ * @return    {String} return value, @example 127.0.0.1:3001
  */
 exports.getPrimary = function( chunkData, chunkName, leaseTime, timestamp ){
 // START
   log.args( Error(), arguments );
-  // 租约时长1分钟
   [leaseTime, timestamp] = [parseInt(leaseTime), parseInt(timestamp)];
 
   let primary;
   let maxVer = chunkData[chunkName][1];
   let [...list] = chunkData[chunkName].slice(3);
 
-  // 查找以'P'结尾的pair
   let index = list.findIndex(item => /,P$/i.test(item));
 
-  // 如果存在
   if(-1 < index){
     let [pair, tm] = list[index].split(',');
     tm = parseInt(tm);
-    // 租约有效
     if(tm + leaseTime > timestamp){
       primary = pair;
     }
@@ -412,7 +405,6 @@ exports.setPrimary = function( chunkData, chunkName, pair, timestamp ){
       let item = list[i];
       let arr = item.split(',');
       let [p, tm] = arr;
-      // 去掉尾部的P标志(如果有)
       arr.length = 2;
       if( p.trim() === pair ){
         arr[1] = timestamp;
@@ -421,8 +413,8 @@ exports.setPrimary = function( chunkData, chunkName, pair, timestamp ){
       list[i] = arr.join(',');
     }
 
-    chunkData[chunkName].length = 3; /* 只保留前3个元素 */
-    chunkData[chunkName].splice(3, 0, ...list); /* 追加元素 */
+    chunkData[chunkName].length = 3;
+    chunkData[chunkName].splice(3, 0, ...list);
 
     log.end( Error(), jsons(chunkData) );
     return chunkData;
@@ -461,7 +453,7 @@ exports.updateTime = function( chunkData, chunkName, pair, timestamp ){
  * get replica count
  * @chunkData {JSON}   base info of all chunk on local, @example {"aabbccdd":[1,20,3,"127.0.0.1:3001,1598516343990","127.0.0.1:3002,1600247712022","127.0.0.1:3003,1598516343990,P"]}
  * @chunkName {String} name of chunk, @example "aabbccdd"
- * @return    {Number} 返回值, @example 3
+ * @return    {Number} return value, @example 3
  */
 exports.getReplicaCount = function( chunkData, chunkName ){
 // START
@@ -484,7 +476,7 @@ exports.getReplicaCount = function( chunkData, chunkName ){
  * get servers of chunk
  * @chunkData {JSON}   base info of all chunk on local, @example {"aabbccdd":[1,10,3,"127.0.0.1:3001,1585471730177","127.0.0.1:3002,1585471730177","127.0.0.1:3003,1585471730177"]}
  * @chunkName {String} name of chunk, @example "aabbccdd"
- * @return    {Array}  返回值, @example []
+ * @return    {Array}  return value, @example []
  */
 exports.getServerList = function( chunkData, chunkName ){
 // START

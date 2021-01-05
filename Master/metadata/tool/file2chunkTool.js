@@ -26,20 +26,17 @@ const {util, clog, jsonlog, log, jsons} = require('../../../base');
  * @file2chunkData {JSON}   map data of filePath to chunkName, @example {"/usr/data/001":["aabbccdd"]}
  * @filePath       {String} file path of system, @example "/usr/data/001"
  * @chunkName      {String} name of chunk, @example "eeffgghh"
- * @return         {Array}  返回值，[块索引, 块名], @example [1, "eeffgghh"]
+ * @return         {Array}  return value, @example [1, "eeffgghh"]
  */
 exports.add = function( file2chunkData, filePath, chunkName ){
 // START
   log.args( Error(), arguments );
-  // 1 定义空项（如果有）
   file2chunkData[filePath] = file2chunkData[filePath] || [];
 
-  // 2 添加块名
   if( !file2chunkData[filePath].includes(chunkName) ){
     file2chunkData[filePath].push(chunkName);
   }
 
-  // 3 返回数据
   let chunkIndex = file2chunkData[filePath].length - 1;
 
   log.info( Error(), jsons(file2chunkData) );
@@ -55,14 +52,13 @@ exports.add = function( file2chunkData, filePath, chunkName ){
  * delete file path
  * @file2chunkData {JSON}   map data of filePath to chunkName, @example {"/usr/data/001":["aabbccdd"], "/usr/data/002":["eeffgghh"]}
  * @filePath       {String} file path of system, @example "/usr/data/001"
- * @return         {JSON}   返回值, @example {"code":0, "msg":""}
+ * @return         {JSON}   return value, @example {"code":0, "msg":""}
  */
 exports.delete = function( file2chunkData, filePath ){
 // START
   log.args( Error(), arguments );
   let chunkNameList = file2chunkData[filePath];
 
-  // 从命名空间中移除
   delete file2chunkData[filePath];
 
   log.end( Error(), jsons(file2chunkData) );
@@ -77,7 +73,7 @@ exports.delete = function( file2chunkData, filePath ){
  * get list of chunk name of file path
  * @file2chunkData {JSON}   map data of filePath to chunkName, @example {"/usr/data/001":["aabbccdd", "eeffgghh"]}
  * @filePath       {String} file path of system, @example "/usr/data/001"
- * @return         {Array}  返回值, @example ["aabbccdd", "eeffgghh"]
+ * @return         {Array}  return value, @example ["aabbccdd", "eeffgghh"]
  */
 exports.getChunkNameList = function( file2chunkData, filePath ){
 // START
@@ -122,7 +118,7 @@ exports.getByIndex = function( file2chunkData, filePath, index ){
  * @filePath       {String} file path of system, @example "/usr/data/001"
  * @index          {Number} index of chunk, @example 0
  * @count          {Number} count, @example 1
- * @return         {Array}  Return value, @example []
+ * @return         {Array}  return value, @example []
  */
 exports.getByIndexList = function( file2chunkData, filePath, index, count ){
 // START
@@ -194,7 +190,7 @@ exports.getLast = function( file2chunkData, filePath ){
  * get last chunk name of file path
  * @file2chunkData {JSON}   map data of filePath to chunkName, @example {"/usr/data/001":["aabbccdd", "eeffgghh"]}
  * @filePath       {String} file path of system, @example "/usr/data/001"
- * @return         {String} 返回值, @example eeffgghh
+ * @return         {String} return value, @example eeffgghh
  */
 exports.getLastChunkName = function( file2chunkData, filePath ){
 // START

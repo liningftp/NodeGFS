@@ -6,7 +6,7 @@
  * @project: GFS2_ClientLib
  * @copyright: liningftp@qq.com
  * @name: gfs
- * @desc: 写入、追加和读取的客户端库
+ * @desc: system API
  * @file: gfs.js
  * @author: admin
  * SUMMARY_END
@@ -32,7 +32,7 @@ const maxChunkSize = 67108864; // 64MByte
  * @mode       {String} type mode, O_APPEND whe flags is O_RDWR, @example "O_APPEND"
  * @masterHost {String} host of Master server, @example "127.0.0.1"
  * @masterPort {Number} port of Master server, @example 3000
- * @return     {JSON}   返回值, @example {"code":0,"msg":""}
+ * @return     {JSON}   return value, @example {"code":0,"msg":""}
  */
 exports.open = async function( filePath, flags, mode, masterHost, masterPort ){
 // START
@@ -51,7 +51,7 @@ exports.open = async function( filePath, flags, mode, masterHost, masterPort ){
  * @fd         {String} file describe as timestamp when file is opened, @example "1606226758420"
  * @masterHost {String} host of Master server, @example "127.0.0.1"
  * @masterPort {Number} port of Master server, @example 3000
- * @return     {JSON}   返回值, @example {"code":0,"msg":""}
+ * @return     {JSON}   return value, @example {"code":0,"msg":""}
  */
 exports.close = async function( filePath, fd, masterHost, masterPort ){
 // START
@@ -69,7 +69,7 @@ exports.close = async function( filePath, fd, masterHost, masterPort ){
  * @filePath   {String} file path of system, @example "/usr/data/001"
  * @masterHost {String} host of Master server, @example "127.0.0.1"
  * @masterPort {Number} port of Master server, @example 3000
- * @return     {JSON}   返回值, @example {"code":0, "msg":""}
+ * @return     {JSON}   return value, @example {"code":0, "msg":""}
  */
 exports.createDir = async function( filePath, masterHost, masterPort ){
 // START
@@ -89,7 +89,7 @@ exports.createDir = async function( filePath, masterHost, masterPort ){
  * @fd         {Number} file describe as timestamp when file is opened, @example 1606961159937
  * @masterHost {String} host of Master server, @example "127.0.0.1"
  * @masterPort {Number} port of Master server, @example 3000
- * @return     {JSON}   返回值, @example {"code":0,"msg":""}
+ * @return     {JSON}   return value, @example {"code":0,"msg":""}
  */
 exports.deleteDir = async function( filePath, fd, masterHost, masterPort ){
 // START
@@ -108,7 +108,7 @@ exports.deleteDir = async function( filePath, fd, masterHost, masterPort ){
  * @replicaCount {Number} count of relipcas, @example 3
  * @masterHost   {String} host of Master server, @example "127.0.0.1"
  * @masterPort   {Number} port of Master server, @example 3000
- * @return       {JSON}   返回值, @example {"code":0, "msg":""}
+ * @return       {JSON}   return value, @example {"code":0, "msg":""}
  */
 exports.createFile = async function( filePath, replicaCount, masterHost, masterPort ){
 // START
@@ -127,7 +127,7 @@ exports.createFile = async function( filePath, replicaCount, masterHost, masterP
  * @fd         {Number} file describe as timestamp when file is opened, @example 1606909907287
  * @masterHost {String} host of Master server, @example "127.0.0.1"
  * @masterPort {Number} port of Master server, @example 3000
- * @return     {JSON}   返回值, @example {"code":0,"msg":""}
+ * @return     {JSON}   return value, @example {"code":0,"msg":""}
  */
 exports.deleteFile = async function( filePath, fd, masterHost, masterPort ){
 // START
@@ -148,7 +148,7 @@ exports.deleteFile = async function( filePath, fd, masterHost, masterPort ){
  * @position   {Number} position of content, @example 2
  * @masterHost {String} host of Master server, @example "127.0.0.1"
  * @masterPort {Number} port of Master server, @example 3000
- * @return     {JSON}   返回值, @example {"code":0,"data":[{"chunkIndex":0,"startPos":0,"length":3}]}
+ * @return     {JSON}   return value, @example {"code":0,"data":[{"chunkIndex":0,"startPos":0,"length":3}]}
  */
 exports.write = async function( filePath, fd, content, position, masterHost, masterPort ){
 // START
@@ -174,15 +174,12 @@ exports.write = async function( filePath, fd, content, position, masterHost, mas
 
   jsonlog( result );
 
-  // 判断数据是否有效
   let {chunkName, primary, serverList, version} = result.data;
 
   clog(2);
-  // B 推送数据，获取数据缓存key
   [result, bigData] = await chunkserverAPI.primaryPushData( serverList, contentData );
   if(0 != result.code){ return result; }
 
-  // 缓存key
   let {cacheKey} = result.data;
 
   clog(3);
@@ -206,7 +203,7 @@ exports.write = async function( filePath, fd, content, position, masterHost, mas
  * @content    {Buffer} content data, @example Buffer.from("999")
  * @masterHost {String} host of Master server, @example "127.0.0.1"
  * @masterPort {Number} port of Master server, @example 3000
- * @return     {JSON}   返回值, @example {"code":0,"data":{"chunkIndex":0,"startPos":0,"length":3}}
+ * @return     {JSON}   return value, @example {"code":0,"data":{"chunkIndex":0,"startPos":0,"length":3}}
  */
 exports.append = async function( filePath, fd, content, masterHost, masterPort ){
 // START
@@ -252,7 +249,7 @@ exports.append = async function( filePath, fd, content, masterHost, masterPort )
  * @maxChunkSize {Number} max size of chunk, @example 67108864
  * @masterHost   {String} host of Master server, @example "127.0.0.1"
  * @masterPort   {Number} port of Master server, @example 3000
- * @return       {JSON}   返回值, @example {"code":0,"data":"123"}
+ * @return       {JSON}   return value, @example {"code":0,"data":"123"}
  */
 exports.read = async function( filePath, fd, position, length, maxChunkSize, masterHost, masterPort ){
 // START
@@ -295,7 +292,7 @@ exports.read = async function( filePath, fd, position, length, maxChunkSize, mas
 /**
  * snapshot ( TODO )
  * @filePath {String} file path of system, @example "/use/data/1.txt"
- * @return   {JSON}   返回值, @example {"code":0,"msg":""}
+ * @return   {JSON}   return value, @example {"code":0,"msg":""}
  */
 exports.snapshot = async function( filePath ){
 // START

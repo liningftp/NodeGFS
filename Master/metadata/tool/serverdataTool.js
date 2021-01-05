@@ -134,7 +134,7 @@ exports.getServerList = function( serverData ){
  * @nowTime      {Number} current time, @example 1599033677924
  * @excludeList  {Array}  exclude pair list, @example ["127.0.0.1:3001", "127.0.0.1:3002"]
  * @count        {Number} count, @example 1
- * @return       {Array}  返回值, @example []
+ * @return       {Array}  return value, @example []
  */
 exports.getFree = function( serverData, maxUseRate, maxAliveTime, nowTime, excludeList, count ){
 // START
@@ -142,20 +142,20 @@ exports.getFree = function( serverData, maxUseRate, maxAliveTime, nowTime, exclu
 
   excludeList = excludeList || [];
 
-  // 筛选
+  // filter
   let arr = [];
   for( const [pair, item] of Object.entries(serverData) ){
     let [useRate, tm] = item;
-    // 使用率较低，还在保活时间期内，主机没在黑名单
+    // priority to use low useRate, in alive, not in black list
     if( useRate < maxUseRate && (tm + maxAliveTime > nowTime) && !excludeList.includes(pair) ){
       arr.push([pair, useRate]);
     }
   }
 
-  // 排序，抽取100个进行排序(主要针对集群机器太多的情况进行简化)
+  // sort
   arr.sort( (v1, v2) => (v1[1] - v2[1]) );
 
-  // 取前count个
+  // get top count
   let list = arr.slice(0, count).map(v => v[0]);
 
   log.end( Error(), jsons(list) );
@@ -172,7 +172,7 @@ exports.getFree = function( serverData, maxUseRate, maxAliveTime, nowTime, exclu
  * @pair         {String} chunkserver host and port, @example "127.0.0.1:3002"
  * @maxAliveTime {Number} max alive time, @example 120000
  * @timestamp    {Number} time stamp, @example 1599033784420
- * @return       {Number} 返回值, @example 1
+ * @return       {Number} return value, @example 1
  */
 exports.isAlive = function( serverData, pair, maxAliveTime, timestamp ){
 // START
@@ -197,7 +197,7 @@ exports.isAlive = function( serverData, pair, maxAliveTime, timestamp ){
  * @serverData   {JSON}   data of server, @example {"127.0.0.1:3001":[12,1599033406152],"127.0.0.1:3002":[22,1599033406152],"127.0.0.1:3003":[79,1599033677924]}
  * @maxAliveTime {Number} max alive time, @example 120000
  * @timestamp    {Number} time stamp, @example 1599033784420
- * @return       {Array}  返回值, @example ["127.0.0.1:3001"]
+ * @return       {Array}  return value, @example ["127.0.0.1:3001"]
  */
 exports.getExpireList = function( serverData, maxAliveTime, timestamp ){
 // START

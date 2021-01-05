@@ -65,7 +65,7 @@ exports.deleteChunk = function( chunkversionData, chunkName ){
  * get chunk version
  * @chunkversionData {JSON}   chunkversion of all chunk on local, @example {"aabbccdd":[1,12], "eeffgghh":[2, 20]}
  * @chunkName        {String} name of chunk, @example "aabbccdd"
- * @return           {Number} 返回值, @example 2
+ * @return           {Number} return value, @example 2
  */
 exports.getVersion = function( chunkversionData, chunkName ){
 // START

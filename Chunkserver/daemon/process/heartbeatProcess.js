@@ -30,22 +30,17 @@ clog( rt );
 let logPath;
 let state = 'START'; // 'PAUSE', 'RESTART'
 
-// 绑定主线程通讯接口
 process.on('message', (message) => {
   let {flag} = message;
 
-  // 主线程触发启动
   if('init' == flag){
 
     logPath = message.logPath;
 
     log.init( logPath );
 
-    // 启动crontab
     schedule.scheduleJob(scheduleRule, () => {
-      // 当侦测到Master重启过，则停止心跳上报，主进程将块信息重新上报后，再发来继续心跳上报命令
       if('START' == state){
-        // 向主进程请求上报数据
         process.send({
           'flag': 'mainData',
         });
@@ -55,7 +50,6 @@ process.on('message', (message) => {
   else if('RESTART' == flag){
     state = 'START';
   }
-  // 主线程返回需要上报到Master的数据
   else if('mainData' == flag){
     let {
       collectList,
@@ -69,7 +63,6 @@ process.on('message', (message) => {
       localPort
     } = message;
 
-    // 执行上报逻辑，关键：向主线程和子线程请求的数据，没有返回也没关系，待下次上报时肯定又返回，这些都是非紧急数据，延迟一个上报周期也无妨
     exports._start(collectList, errorList, leaseList, useRate, startTime, masterHost, masterPort, localHost, localPort);
   }
 });
@@ -97,7 +90,6 @@ exports._start = async function( collectList, errorList, leaseList, useRate, sta
 
   let result = {}, bigData;
 
-  // Chunkserver刚启动时，startTime没有来及传递过来，所以不进行心跳上报
   if( !startTime ){
     log.end( Error(), jsons('have no startTime, waiting  for master response') );
     return;
@@ -123,12 +115,9 @@ exports._start = async function( collectList, errorList, leaseList, useRate, sta
   }
   clog( '------------------------------<' );
 
-  // 检验Master服务器是否重启过
   if( 0 != result.code ){
     if('MASTER_REBOOT' == result.error){
-      // 暂停心跳包上报
       state = 'PAUSE';
-      // 报告给主进程
       process.send({
         'flag': 'reboot'
       });
@@ -136,7 +125,6 @@ exports._start = async function( collectList, errorList, leaseList, useRate, sta
   }
   else{
     let {deleteList, cloneList} = JSON.parse( bigData.toString() );
-    // 推送到主线程去执行
     process.send({
       'flag': 'taskData',
       'deleteList': deleteList,

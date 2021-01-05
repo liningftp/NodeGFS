@@ -106,7 +106,6 @@ exports.getReport = function( errorData ){
 // START
   let list = Object.entries(errorData);
 
-  // 按升序排列
   let result = lodash.sortBy(list, (item) => {
     return item[1][1];
   });

@@ -46,7 +46,7 @@ exports.add = function( namespaceSnapshotData, filePath, timestamp, tree ){
  * @namespaceSnapshotData {JSON}   snapshot tree of namespace, @example {"/usr/data/001":{"1600959455031":{"/usr":{"_type":"dir","_lock":{"r":[],"w":[]},"/data":{"_type":"dir","_lock":{"r":[],"w":[]},"/001":{"_type":"file","_lock":{"r":[],"w":[]}}}}}}}
  * @filePath              {String} file path of system, @example "/usr/data/001"
  * @timestamp             {String} time stamp, @example "1600959455031"
- * @return                {JSON}   返回值, @example {}
+ * @return                {JSON}   return value, @example {}
  */
 exports.get = function( namespaceSnapshotData, filePath, timestamp ){
 // START
@@ -62,7 +62,7 @@ exports.get = function( namespaceSnapshotData, filePath, timestamp ){
  * get timestamp list
  * @namespaceSnapshotData {Array}  snapshot tree of namespace, @example {"/usr/data/001":{"1600959455031":{"/usr":{"_type":"dir","_lock":{"r":[],"w":[]},"/data":{"_type":"dir","_lock":{"r":[],"w":[]},"/001":{"_type":"file","_lock":{"r":[],"w":[]}}}}}}}
  * @filePath              {String} file path of system, @example "/usr/data/001"
- * @return                {Array}  返回值, @example [15978792744472,1597879295305]
+ * @return                {Array}  return value, @example [15978792744472,1597879295305]
  */
 exports.getList = function( namespaceSnapshotData, filePath ){
 // START

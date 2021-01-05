@@ -213,7 +213,7 @@ exports.delete = function( chunkRoot, chunkName ){
  * get chunk size
  * @chunkRoot {String} root directory where the chunk is stored, @example "C:\work\GFS2\AppData\chunkserver\chunk1"
  * @chunkName {String} name of chunk, @example "aabbccdd"
- * @return    {Number} 返回值, @example 1
+ * @return    {Number} return value, @example 1
  */
 exports.getSize = function( chunkRoot, chunkName ){
 // START

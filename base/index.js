@@ -5,7 +5,6 @@ exports.schedule = require('node-schedule');
 exports.crc32 = require('crc-32');
 exports.rimraf = require('rimraf');
 exports.util = require('./util.js');
-exports.utilarray = require('./utilarray.js');
 exports.utilfs = require('./utilfs.js');
 exports.utilstr = require('./utilstr.js');
 

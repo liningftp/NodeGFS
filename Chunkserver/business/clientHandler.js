@@ -52,7 +52,7 @@ const boot = require('../boot/boot.js');
  * @secondServerList {Array}  list of secondary chunkservers, @example ["127.0.0.1:3003"]
  * @timestamp        {Number} current timestamp, @example 1603680283034
  * @maxChunkSize     {Number} max size of chunk, @example 3
- * @return           {Array}  返回值, @example [{"code":0, "data":{"cacheKey":"key123456"}}]
+ * @return           {Array}  return value, @example [{"code":0, "data":{"cacheKey":"key123456"}}]
  */
 exports.primaryPushData = async function( cacheData, cacheRoot, body, secondServerList, timestamp, maxChunkSize ){
 // START
@@ -110,7 +110,7 @@ exports.primaryPushData = async function( cacheData, cacheRoot, body, secondServ
  * @blockSize        {Number} block size for checksum, @example 65536
  * @checksumPath     {String} path of file to save checksum of chunk, @example "C:\work\GFS2\AppData\chunkserver\checksum1\data"
  * @versionPath      {String} path of file to save version of chunk, @example "C:\work\GFS2\AppData\chunkserver\version1\data"
- * @return           {Array}  Return value, @example [ {"code":0,"msg":""} ]
+ * @return           {Array}  return value, @example [ {"code":0,"msg":""} ]
  */
 exports.primaryWrite = async function( chunkData, cacheData, checksumData, chunkversionData, errorData, cacheRoot, cacheKey, chunkRoot, chunkName, version, startPos, secondServerList, timestamp, blockSize, checksumPath, versionPath ){
 // START
@@ -203,9 +203,9 @@ exports.primaryWrite = async function( chunkData, cacheData, checksumData, chunk
 
   /* recalc checksum and update */
   let checksumList = checksumTool.createChecksum(chunkContent, blockSize);
-  checksumTool.setChecksum(checksumData, chunkName, checksumList); /* 更新内存校验和 */
+  checksumTool.setChecksum(checksumData, chunkName, checksumList);
   let itemIndex = checksumTool.getChunkIndex(checksumData, chunkName);
-  result = checksumPersist.setChecksum(chunkName, checksumList, checksumPath, itemIndex); /* 更新磁盘校验和 */
+  result = checksumPersist.setChecksum(chunkName, checksumList, checksumPath, itemIndex);
   if(0 != result.code){
     log.error( Error(), jsons([result]) );
     return [result];
@@ -257,7 +257,7 @@ exports.primaryWrite = async function( chunkData, cacheData, checksumData, chunk
  * @masterHost       {String} host of Master server, @example "127.0.0.1"
  * @masterPort       {Number} port of Master server, @example 3000
  * @checksumPath     {String} path of file to save checksum of chunk, @example "C:\work\GFS2\AppData\chunkserver\checksum1\data"
- * @return           {Array}  Return value, @example [ {"code":0,"data":{"startPos":0}} ]
+ * @return           {Array}  return value, @example [ {"code":0,"data":{"startPos":0}} ]
  */
 exports.primaryAppend = async function( chunkData, cacheData, checksumData, chunkversionData, errorData, masterData, filePath, cacheRoot, cacheKey, chunkRoot, version, secondServerList, timestamp, blockSize, maxChunkSize, masterHost, masterPort, checksumPath ){
 // START
@@ -458,7 +458,7 @@ exports.primaryAppend = async function( chunkData, cacheData, checksumData, chun
  * @startPos         {Number} start position in chunk, @example 2
  * @length           {Number} length of content, @example 4
  * @blockSize        {Number} block size for checksum, @example 65536
- * @return           {Array}  Return value, @example [{"code":0, "msg":""}, []]
+ * @return           {Array}  return value, @example [{"code":0, "msg":""}, []]
  */
 exports.readChunk = async function( chunkData, checksumData, chunkversionData, errorData, chunkRoot, chunkName, version, startPos, length, blockSize ){
 // START

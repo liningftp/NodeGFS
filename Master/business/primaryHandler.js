@@ -45,7 +45,7 @@ const operationLog = require('../store/operationLog.js');
  * @startTime      {Number} start time of Master server, @example 1602228234877
  * @lockDuration   {Number} lock duration, @example 300000
  * @timestamp      {Number} time stamp, @example 1602228234877
- * @return         {Array}  返回值, @example [{"code":0, "msg":"", "data":{"startTime":1596367828794,"chunkName":"eeffhhii"}}, ""]
+ * @return         {Array}  return value, @example [{"code":0, "msg":"", "data":{"startTime":1596367828794,"chunkName":"eeffhhii"}}, ""]
  */
 exports.getLastChunkName = async function( namespaceData, file2chunkData, filePath, startTime, lockDuration, timestamp ){
 // START
@@ -72,8 +72,8 @@ exports.getLastChunkName = async function( namespaceData, file2chunkData, filePa
  * @pair          {String} chunkserver host and port, @example "127.0.0.1:3001"
  * @useRate       {Number} use rate of disk, @example 25
  * @timestamp     {Number} time stamp, @example 1602228234877
- * @chunkDeadTime {Number} chunk damage after the time, @example 7200000
- * @return        {Array}  返回值, @example [{"code":0, "msg":""}]
+ * @chunkDeadTime {Number} chunk is damage after the time, @example 7200000
+ * @return        {Array}  return value, @example [{"code":0, "msg":""}]
  */
 exports.recvBootData = async function( chunkData, serverData, chunkList, pair, useRate, timestamp, chunkDeadTime ){
 // START
@@ -125,7 +125,7 @@ exports.recvBootData = async function( chunkData, serverData, chunkList, pair, u
  * @pair          {String} chunkserver host and port, @example "127.0.0.1:3001"
  * @startTime     {Number} start time of Master server, @example 1602228234877
  * @timestamp     {Number} time stamp, @example 1602228234877
- * @return        {Array}  返回值, @example [{"code":0, "msg":""}]
+ * @return        {Array}  return value, @example [{"code":0, "msg":""}]
  */
 exports.recvErrorChunk = async function( chunkData, chunklostData, chunkName, pair, startTime, timestamp ){
 // START
@@ -155,7 +155,7 @@ exports.recvErrorChunk = async function( chunkData, chunklostData, chunkName, pa
  * @pair          {String} chunkserver host and port, @example "127.0.0.1:3001"
  * @startTime     {Number} start time of Master server, @example 1602228234877
  * @timestamp     {Number} time stamp, @example 1602228234877
- * @return        {Array}  返回值, @example [{"code":0, "msg":""}]
+ * @return        {Array}  return value, @example [{"code":0, "msg":""}]
  */
 exports.recvFullChunk = async function( chunkfullData, chunkName, pair, startTime, timestamp ){
 // START

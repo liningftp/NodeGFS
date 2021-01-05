@@ -59,7 +59,7 @@ const {
  * @chunkRoot            {String} root directory where the chunk is stored, @example "C:\work\GFS2\AppData\chunkserver\chunk1\"
  * @checksumPath         {String} path of file to save checksum of chunk, @example "C:\work\GFS2\AppData\chunkserver\checksum1\data"
  * @versionPath          {String} path of file to save version of chunk, @example "C:\work\GFS2\AppData\chunkserver\version1\data"
- * @return               {Array}  Return value, @example [{"code":0}]
+ * @return               {Array}  return value, @example [{"code":0}]
  */
 exports.recvLease = async function( chunkData, checksumData, checksumFreeData, chunkversionData, chunkversionFreeData, leaseData, chunkName, version, primary, serverList, isNew, timestamp, blockSize, chunkRoot, checksumPath, versionPath ){
 // START
@@ -145,7 +145,7 @@ exports.recvLease = async function( chunkData, checksumData, checksumFreeData, c
  * @chunkData {JSON}   base info of all chunk on local, @example {"aabbccdd":[306, 1602691021717], "eeffgghh":[1, 1602691021717]}
  * @leaseData {JSON}   lease of primary chunk, @example {"aabbccdd":{"primary":1602576896653, "work":1}}
  * @chunkName {String} name of chunk, @example "eeffgghh"
- * @return    {Array}  返回值, @example [{"code":0, "data":"aabbccdd"}]
+ * @return    {Array}  return value, @example [{"code":0, "data":"aabbccdd"}]
  */
 exports.revokeLease = async function( chunkData, leaseData, chunkName ){
 // START
@@ -153,7 +153,6 @@ exports.revokeLease = async function( chunkData, leaseData, chunkName ){
     return;
   }
 
-  // 设置租约数据
   leasedataTool.revokeLease(leaseData, chunkName);
 
   return leaseData;

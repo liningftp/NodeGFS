@@ -1,8 +1,6 @@
 
-// 存储磁盘上数据块的信息
-
-// 格式:
-// 块名 -> [尺寸, 上报时间]
+// store chunk info
+// format -> [size, reportTime]
 
 const metadata = {
   // 'ab83e19265655130b208def31e0c483ecb835a24a9a7508eaec0df0e62e65870': [67108864, 1602642455697],

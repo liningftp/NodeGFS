@@ -94,7 +94,6 @@ exports.getChecksum = function( checksumData, chunkName ){
 exports.setChecksum = function( checksumData, chunkName, checksumList ){
 // START
   log.args( Error(), arguments );
-  // 块信息不存在，不能直接进行设置，必须先添加
   if( checksumData.hasOwnProperty(chunkName) ){
     checksumData[chunkName][1] = checksumList;
   }
@@ -120,13 +119,10 @@ exports.compare = function( checksumData, chunkName, contentData, blockSize ){
   let b;
 
   if( checksumData.hasOwnProperty(chunkName) ){
-    // 取出原来的校验和
     let checksumList = checksumData[chunkName][1];
 
-    // 重新计算内容的校验和
     let data = exports.createChecksum(contentData, blockSize);
 
-    // 比对结算和提供的校验和是否一致
     b = lodash.isEqual(checksumList, data);
   }
 
@@ -176,7 +172,7 @@ exports.createChecksum = function( contentData, blockSize ){
 /**
  * get checksum count
  * @checksumData {JSON}   checksumdata of all chunk on local, @example {"aabbccdd":[1, 65530, [-1234567890, 123456789012]], "eegghhii":[1, 1234, [-1234567890, 123456789012]]}
- * @return       {Number} 返回值, @example 3
+ * @return       {Number} return value, @example 3
  */
 exports.getCount = function( checksumData ){
 // START

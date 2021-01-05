@@ -2,35 +2,32 @@
 const fs = require("fs");
 const child_process = require("child_process");
 
-// 后面会重复加载，这里不能使用const声明
-let chunkpairTool = require("C:\\work\\GFS2\\Master\\metadata\\tool\\chunkrepairTool.js");
+let chunkpairTool = require("C:\\work\\Git_work\\NodeGFS\\Master\\metadata\\tool\\chunkrepairTool.js");
 
 
 ////////////////////////////////////////////////////////////////////////////////
 
-// 重新载入模块
 function reload(){
-	delete require.cache[require.resolve("C:\\work\\GFS2\\Master\\metadata\\tool\\chunkrepairTool.js")]
-	chunkpairTool = require("C:\\work\\GFS2\\Master\\metadata\\tool\\chunkrepairTool.js");
+  delete require.cache[require.resolve("C:\\work\\Git_work\\NodeGFS\\Master\\metadata\\tool\\chunkrepairTool.js")]
+  chunkpairTool = require("C:\\work\\Git_work\\NodeGFS\\Master\\metadata\\tool\\chunkrepairTool.js");
 }
 
 
-// 创建子进程服务器端
 async function forkServer(forkFile, startParam){
-	var child = child_process.fork(forkFile);
+  var child = child_process.fork(forkFile);
 
-	return	new Promise( (resolve, reject) => {
-		child.on("message", (result) => {
-			if("onload" == result.state){
-				child.send(startParam);
-			}
-			else if("started" == result.state){
-				resolve(child);
-			}
-			else{
-			}
-		});
-	});
+  return  new Promise( (resolve, reject) => {
+    child.on("message", (result) => {
+      if("onload" == result.state){
+        child.send(startParam);
+      }
+      else if("started" == result.state){
+        resolve(child);
+      }
+      else{
+      }
+    });
+  });
 
 }
 
@@ -40,16 +37,16 @@ async function forkServer(forkFile, startParam){
 // add loss or error chunk
 exports.add = function(){
 // START
-	reload();
-	// 执行业务逻辑
-	var chunkrepairData = {};
-	var repairType = "loss";
-	var srcPair = "127.0.0.1:3001";
-	var chunkNameList = ["aabbccdd"]
-	var timestamp = 1601130794448;
-	var result = chunkpairTool.add(chunkrepairData, repairType, srcPair, chunkNameList, timestamp);
+  reload();
+  // run
+  var chunkrepairData = {};
+  var repairType = "loss";
+  var srcPair = "127.0.0.1:3001";
+  var chunkNameList = ["aabbccdd"]
+  var timestamp = 1601130794448;
+  var result = chunkpairTool.add(chunkrepairData, repairType, srcPair, chunkNameList, timestamp);
 
-	return result;
+  return result;
 // END
 };
 
@@ -57,15 +54,15 @@ exports.add = function(){
 // get list to repair
 exports.getList = function(){
 // START
-	reload();
-	// 执行业务逻辑
-	var chunkrepairData = {"aabbccdd":["error",["127.0.0.1:3001",1599701518196]]};
-	var targetPair = "127.0.0.1:3001";
-	var repairCount = 1;
-	var timestamp = 1606443851845;
-	var result = chunkpairTool.getList(chunkrepairData, targetPair, repairCount, timestamp);
+  reload();
+  // run
+  var chunkrepairData = {"aabbccdd":["error",["127.0.0.1:3001",1599701518196]]};
+  var targetPair = "127.0.0.1:3001";
+  var repairCount = 1;
+  var timestamp = 1606443851845;
+  var result = chunkpairTool.getList(chunkrepairData, targetPair, repairCount, timestamp);
 
-	return result;
+  return result;
 // END
 };
 
@@ -73,13 +70,13 @@ exports.getList = function(){
 // delete repairer
 exports.delete = function(){
 // START
-	reload();
-	// 执行业务逻辑
-	var chunkrepairData = {"aabbccdd":["loss",["127.0.0.1:3001",1601130794448], ["127.0.0.1:3002", 1601130794448]]};
-	var chunkName = "aabbccdd";
-	var result = chunkpairTool.delete(chunkrepairData, chunkName);
+  reload();
+  // run
+  var chunkrepairData = {"aabbccdd":["loss",["127.0.0.1:3001",1601130794448], ["127.0.0.1:3002", 1601130794448]]};
+  var chunkName = "aabbccdd";
+  var result = chunkpairTool.delete(chunkrepairData, chunkName);
 
-	return result;
+  return result;
 // END
 };
 
@@ -87,15 +84,15 @@ exports.delete = function(){
 // set repairer
 exports.setRepairer = function(){
 // START
-	reload();
-	// 执行业务逻辑
-	var chunkrepairData = {"aabbccdd":["loss",["127.0.0.1:3001",1601130794448]]};
-	var chunkNameList = ["aabbccdd", "eeffgghh"]
-	var targetPair = "127.0.0.1:3003";
-	var timestamp = 1601131150047;
-	var result = chunkpairTool.setRepairer(chunkrepairData, chunkNameList, targetPair, timestamp);
+  reload();
+  // run
+  var chunkrepairData = {"aabbccdd":["loss",["127.0.0.1:3001",1601130794448]]};
+  var chunkNameList = ["aabbccdd", "eeffgghh"]
+  var targetPair = "127.0.0.1:3003";
+  var timestamp = 1601131150047;
+  var result = chunkpairTool.setRepairer(chunkrepairData, chunkNameList, targetPair, timestamp);
 
-	return result;
+  return result;
 // END
 };
 
@@ -103,14 +100,14 @@ exports.setRepairer = function(){
 // is the repairer or not
 exports.isRepairer = function(){
 // START
-	reload();
-	// 执行业务逻辑
-	var chunkrepairData = {"aabbccdd":["loss",["127.0.0.1:3001",1601130794448], ["127.0.0.1:3002", 1601130794448]]};
-	var chunkName = "aabbccdd";
-	var targetPair = "127.0.0.1:3002";
-	var result = chunkpairTool.isRepairer(chunkrepairData, chunkName, targetPair);
+  reload();
+  // run
+  var chunkrepairData = {"aabbccdd":["loss",["127.0.0.1:3001",1601130794448], ["127.0.0.1:3002", 1601130794448]]};
+  var chunkName = "aabbccdd";
+  var targetPair = "127.0.0.1:3002";
+  var result = chunkpairTool.isRepairer(chunkrepairData, chunkName, targetPair);
 
-	return result;
+  return result;
 // END
 };
 
@@ -118,12 +115,12 @@ exports.isRepairer = function(){
 // clear expire
 exports._clear = function(){
 // START
-	reload();
-	// 执行业务逻辑
-	var chunkrepairData = {"aabbccdd":["error",["127.0.0.1:3001",1599701518196] ]};
-	var timestamp = 1603841772044;
-	var result = chunkpairTool._clear(chunkrepairData, timestamp);
+  reload();
+  // run
+  var chunkrepairData = {"aabbccdd":["error",["127.0.0.1:3001",1599701518196] ]};
+  var timestamp = 1603841772044;
+  var result = chunkpairTool._clear(chunkrepairData, timestamp);
 
-	return result;
+  return result;
 // END
 };

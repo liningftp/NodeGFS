@@ -69,19 +69,16 @@ exports.start = async function( checksumData, checksumFreeData, chunkData, chunk
 // START
   log.args( Error(), arguments );
 
-  // 1 克隆数据块子进程
+  // 1 clone sub process
   let cloneWorker = child_process.fork( path.join(__dirname, './process/cloneProcess.js') );
-  // 监听子进程
   cloneWorker.on('message', message => {
     let {flag} = message;
     if( 'cloneData' == flag ){
       log.info( new Error(), jsons( message ) );
       let {cloneData} = message;
-      // 克隆进程已经完成了块的克隆、校验，由主进程做收尾工作
       exports._handleClone( checksumData, checksumFreeData, chunkData, chunkversionData, chunkversionFreeData, cloneData, checksumPath, versionPath );
     }
   });
-  // 初始化
   cloneWorker.send({
     'flag':'init',
     chunkRoot,
@@ -90,13 +87,10 @@ exports.start = async function( checksumData, checksumFreeData, chunkData, chunk
     maxChunkSize
   });
 
-  // 2 启动心跳子进程
+  // 2 heartbeat sub process
   let heartbeatWorker = child_process.fork( path.join(__dirname, './process/heartbeatProcess.js') );
-  // 监听子进程
   heartbeatWorker.on('message', async (message) => {
     let {flag} = message;
-
-    /* 重新上报 */
     if('reboot' == flag){
       let result = await boot.reportBootData( chunkData, chunkversionData, masterData, maxChunkCount, masterHost, masterPort, localHost, localPort );
       if(0 == result.code){
@@ -136,7 +130,7 @@ exports.start = async function( checksumData, checksumFreeData, chunkData, chunk
         localPort
       });
     }
-    else if('taskData' == flag){ /* 心跳层从Master返回的数据 */
+    else if('taskData' == flag){
       log.info( Error(), `${jsons( message )}` );
 
       let {deleteList, cloneList} = message;
@@ -165,19 +159,16 @@ exports.start = async function( checksumData, checksumFreeData, chunkData, chunk
   });
 
 
-  // 3 创建并启动块扫描子进程
+  // 3 scan sub process
   let scanWorker = child_process.fork( path.join(__dirname, './process/scanProcess.js') );
-  // 启动子进程
   scanWorker.send({
     'flag': 'start',
     chunkRoot,
     logPath,
     blockSize,
   });
-  // 监听子进程
   scanWorker.on('message', message => {
     let {flag} = message;
-    // 扫描子进程请求主进程提供块对应的校验和信息
     if('mainData' == flag){
       let {startIndex, endIndex} = message;
       scanWorker.send({
@@ -185,7 +176,6 @@ exports.start = async function( checksumData, checksumFreeData, chunkData, chunk
         'checksumData': checksumData
       });
     }
-    // scan子进程返回心跳子进程需要的扫描结果数据
     else if('errorList' == flag){
       let {errorList} = message;
       let timestamp = Date.now();
@@ -219,46 +209,46 @@ exports._handleClone = function( checksumData, checksumFreeData, chunkData, chun
     let {checksumList, version, size} = item;
 
     if( !chunkdataTool.has(chunkData, chunkName) ){
-      // 1 添加块
+      // 1 add chunk
       chunkdataTool.add(chunkData, chunkName, size);
 
-      // 2 添加校验和
+      // 2 add checksum
       let freeIndex = checksumFreeTool.getFreeIndex(checksumFreeData);
       if( -1 == freeIndex){
         freeIndex = checksumTool.getCount(checksumData);
       }
-      checksumTool.addChunk(checksumData, chunkName, checksumList, freeIndex); /* 添加到内存 */
-      checksumPersist.addChunk(chunkName, checksumList, checksumPath, freeIndex); /* 添加到磁盘 */
-      checksumFreeTool.delete(checksumFreeData, freeIndex); /* 从空位数据中删除 */
+      checksumTool.addChunk(checksumData, chunkName, checksumList, freeIndex);
+      checksumPersist.addChunk(chunkName, checksumList, checksumPath, freeIndex);
+      checksumFreeTool.delete(checksumFreeData, freeIndex);
 
-      // 3 添加版本
+      // 3 add version
       freeIndex = chunkversionFreeTool.getFreeIndex(chunkversionFreeData);
       if( -1 == freeIndex){
         freeIndex = chunkversionTool.getCount(chunkversionData);
       }
-      chunkversionTool.addChunk(chunkversionData, chunkName, version, freeIndex); /* 添加到内存 */
-      chunkversionPersist.addChunk(chunkName, version, versionPath, freeIndex); /* 添加到磁盘 */
-      chunkversionFreeTool.delete(chunkversionFreeData, freeIndex); /* 从空位数据中删除 */
+      chunkversionTool.addChunk(chunkversionData, chunkName, version, freeIndex);
+      chunkversionPersist.addChunk(chunkName, version, versionPath, freeIndex);
+      chunkversionFreeTool.delete(chunkversionFreeData, freeIndex);
     }
     else{
-      // 1 更新块尺寸
+      // 1 size
       chunkdataTool.setSize(chunkData, chunkName, size);
 
-      // 2 更新校验和
+      // 2 checksum
       let itemIndex = checksumTool.getChunkIndex(checksumData, chunkName);
       if( -1 < itemIndex ){
-        checksumTool.setChecksum(checksumData, chunkName, checksumList); /* 更新内存 */
-        checksumPersist.setChecksum(chunkName, checksumList, checksumPath, itemIndex); /* 更新磁盘 */
+        checksumTool.setChecksum(checksumData, chunkName, checksumList);
+        checksumPersist.setChecksum(chunkName, checksumList, checksumPath, itemIndex);
       }
       else{
         // Report Error
       }
 
-      // 3 更新版本
+      // 3 version
       itemIndex = chunkversionTool.getChunkIndex(chunkversionData, chunkName);
       if( -1 < itemIndex ){
-        chunkversionTool.setVersion(chunkversionData, chunkName, version); /* 更新内存 */
-        chunkversionPersist.setVersion(chunkName, version, versionPath, itemIndex); /* 更新磁盘 */
+        chunkversionTool.setVersion(chunkversionData, chunkName, version);
+        chunkversionPersist.setVersion(chunkName, version, versionPath, itemIndex);
       }
       else{
         // Report Error
@@ -296,13 +286,13 @@ exports._handleDelete = function( checksumData, checksumFreeData, chunkData, chu
   }
 
   for(const chunkName of deleteList){
-    // 1 处理数据块
+    // 1 chunkName
     chunkdataTool.delete(chunkData, chunkName);
     if( utilfs.hasFilePath( path.join(chunkRoot, chunkName) ) ){
       chunkdataPersist.delete(chunkRoot, chunkName);
     }
 
-    // 2 处理校验和
+    // 2 checksum
     let itemIndex = checksumTool.getChunkIndex(checksumData, chunkName);
     if(-1 < itemIndex){
       checksumPersist.deleteChunk(itemIndex, checksumPath);
@@ -310,7 +300,7 @@ exports._handleDelete = function( checksumData, checksumFreeData, chunkData, chu
       checksumFreeTool.add(checksumFreeData, itemIndex);
     }
 
-    // 3 处理版本
+    // 3 version
     itemIndex = chunkversionTool.getChunkIndex(chunkversionData, chunkName);
     if(-1 < itemIndex){
       chunkversionPersist.deleteChunk(itemIndex, versionPath);

@@ -1,8 +1,8 @@
 
 /**
- * cls && node api/delete.js file /usr/data/001
- * cls && node api/create.js file /usr/data/001
- * cls && node api/append.js /usr/data/001 xxx
+ * node api/delete.js file /usr/data/001
+ * node api/create.js file /usr/data/001
+ * node api/append.js /usr/data/001 xxx
  */
 
 const {utilfs, clog, jsonlog} = require('../../base');

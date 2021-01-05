@@ -30,18 +30,14 @@ const errorData = errordata.get();
 const leaseData = leasedata.get();
 const masterData = masterdata.get();
 
-// 请求处理入口
 async function response(socket, data){
   let result = comm.decodeMessageData(data);
 
   var head = result.head;
   var body = result.body;
 
-  // 处理客户端、Master和Primary发来的请求
   if(handler[head.method]){
-    // 获取结果
     let [res, bigData] = await handler[head.method](head, body);
-    // 返回结果
     let message = comm.encodeMessageData(res, bigData);
     comm.send(socket, message);
     comm.end(socket);
@@ -53,8 +49,6 @@ const timestamp = Date.now();
 
 ( async () => {
   
-  // 初始化配置
-  // 获取命令行输入参数
   // node main.js -h 127.0.0.1 -p 3001 -c /cache1 -d /data1 -s 2
   // args -> { _: [], h: '127.0.0.1', p: 3000, c: '/cache1', d: '/data1' }
   let args = minimist(process.argv.splice(2));
@@ -72,15 +66,12 @@ const timestamp = Date.now();
   let localPort     = config.LOCAL_PORT;
   let logPath       = config.LOG_PATH;
 
-  // 初始执行日志
   log.init( logPath );
 
   await boot.reportBootData( chunkData, chunkversionData, masterData, maxChunkCount, masterHost, masterPort, localHost, localPort );
 
-  // 守护子线程启动
   daemon.start( checksumData, checksumFreeData, chunkData, chunkversionData, chunkversionFreeData, errorData, leaseData, masterData, checksumPath, chunkRoot, versionPath, blockSize, maxChunkSize, maxChunkCount, masterHost, masterPort, localHost, localPort, logPath );
 
-  // 启动服务程序
   comm.createServer( localHost, localPort, {
     'onListen': function(host, port){
       console.log(`Chunkserver server started`);

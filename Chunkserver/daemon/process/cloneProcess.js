@@ -28,7 +28,6 @@ let working = 0;
 process.on('message', message => {
   let {flag} = message;
 
-  // 主线程发起的，启动命令
   if('init' == flag){
     chunkRoot = message.chunkRoot;
     logPath = message.logPath;
@@ -70,18 +69,15 @@ exports._start = async function( cloneQueue, chunkRoot, blockSize, maxChunkSize 
   }
 
   working = 1;
-  // 将cloneQueue中的内容转移到cloneList中
   let cloneList = cloneQueue.splice( 0, cloneQueue.length );
 
   let cloneData = await exports._clone( cloneList, chunkRoot, blockSize, maxChunkSize );
 
-  // 请求一定范围内容校验和数据
   process.send({
     'flag': 'cloneData',
     'cloneData': cloneData
   });
 
-  // 循环调用，直到处理完cloneQueue中内容
   exports._start(cloneQueue, chunkRoot);
   log.end( Error(), jsons( 'void' ) );
 // END
@@ -108,7 +104,6 @@ exports._clone = async function( cloneList, chunkRoot, blockSize, maxChunkSize )
     let [chunkName, version, ...pairList] = item.split(',');
     version = parseInt( version );
     let [host, port] = pairList[0].split(':');
-    // 读取其他服务器上的副本
     let [result, bigData] = await readData( host, port, chunkName, version, 0, maxChunkSize );
     if(0 == result.code){
       result = chunkdataPersist.write( chunkRoot, chunkName, bigData );

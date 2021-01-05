@@ -46,7 +46,7 @@ exports.add = function( file2chunkSnapshotData, filePath, timestamp, chunkNameLi
  * @file2chunkSnapshotData {JSON}   file2chunkData to snapshot, @example {"/usr/data/001":{"1597879274447":["aabbcdd","eeffgghh"]}}
  * @filePath               {String} file path of system, @example "/usr/data/001"
  * @timestamp              {Number} time stamp, @example 1597879274447
- * @return                 {JSON}   返回值, @example {}
+ * @return                 {JSON}   return value, @example {}
  */
 exports.get = function( file2chunkSnapshotData, filePath, timestamp ){
 // START
@@ -64,7 +64,7 @@ exports.get = function( file2chunkSnapshotData, filePath, timestamp ){
  * @file2chunkSnapshotData {JSON}   file2chunkData to snapshot, @example {"/usr/data/001":{"1597879274447":["aabbcdd","eeffgghh"]}}
  * @filePath               {String} file path of system, @example "/usr/data/001"
  * @timestamp              {Number} time stamp, @example 1597879274447
- * @return                 {JSON}   返回值, @example {}
+ * @return                 {JSON}   return value, @example {}
  */
 exports.delete = function( file2chunkSnapshotData, filePath, timestamp ){
 // START

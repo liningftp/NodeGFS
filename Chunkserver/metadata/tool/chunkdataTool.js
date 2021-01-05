@@ -65,7 +65,7 @@ exports.has = function( chunkData, chunkName ){
  * get chunk size
  * @chunkData {JSON}   base info of all chunk on local, @example {"aabbccdd":[306, 1602691021717]}
  * @chunkName {String} name of chunk, @example "aabbccdd"
- * @return    {Number} 返回值, @example 3
+ * @return    {Number} return value, @example 3
  */
 exports.getSize = function( chunkData, chunkName ){
 // START
@@ -146,7 +146,7 @@ exports.setTime = function( chunkData, chunkName, timestamp ){
  * get use rate of storage
  * @chunkData     {JSON}   base info of all chunk on local, @example {}
  * @maxChunkCount {Number} max chunk count of chunkserver, @example 16
- * @return        {Number} 返回值, @example 25
+ * @return        {Number} return value, @example 25
  */
 exports.getUseRate = function( chunkData, maxChunkCount ){
 // START

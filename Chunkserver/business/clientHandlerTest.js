@@ -2,35 +2,32 @@
 const fs = require("fs");
 const child_process = require("child_process");
 
-// 后面会重复加载，这里不能使用const声明
-let clientHandler = require("C:\\work\\GFS2\\Chunkserver\\business\\clientHandler.js");
+let clientHandler = require("C:\\work\\Git_work\\NodeGFS\\Chunkserver\\business\\clientHandler.js");
 
 
 ////////////////////////////////////////////////////////////////////////////////
 
-// 重新载入模块
 function reload(){
-	delete require.cache[require.resolve("C:\\work\\GFS2\\Chunkserver\\business\\clientHandler.js")]
-	clientHandler = require("C:\\work\\GFS2\\Chunkserver\\business\\clientHandler.js");
+  delete require.cache[require.resolve("C:\\work\\Git_work\\NodeGFS\\Chunkserver\\business\\clientHandler.js")]
+  clientHandler = require("C:\\work\\Git_work\\NodeGFS\\Chunkserver\\business\\clientHandler.js");
 }
 
 
-// 创建子进程服务器端
 async function forkServer(forkFile, startParam){
-	var child = child_process.fork(forkFile);
+  var child = child_process.fork(forkFile);
 
-	return	new Promise( (resolve, reject) => {
-		child.on("message", (result) => {
-			if("onload" == result.state){
-				child.send(startParam);
-			}
-			else if("started" == result.state){
-				resolve(child);
-			}
-			else{
-			}
-		});
-	});
+  return  new Promise( (resolve, reject) => {
+    child.on("message", (result) => {
+      if("onload" == result.state){
+        child.send(startParam);
+      }
+      else if("started" == result.state){
+        resolve(child);
+      }
+      else{
+      }
+    });
+  });
 
 }
 
@@ -40,46 +37,46 @@ async function forkServer(forkFile, startParam){
 // client push data to primary
 exports.primaryPushData = async function(){
 // START
-	reload();
+  reload();
 
-	// 启动测试服务端子进程
-	var forkFile = "C:\\work\\CodeDesign\\server\\resource\\netServer.js";
-	var startParamList = [
-	{
-		"method": "startServer",
-		"host": "127.0.0.1",
-		"port": 3003,
-		"targetNameList": [
-			"secondPushData"
-		],
-		"returnValueList": [
-			{
-				"result": {
-					"code": 0,
-					"msg": "ok"
-				}
-			}
-		]
-	}
+  // start subProcess
+  var forkFile = "C:\\work\\CodeDesign\\server\\resource\\netServer.js";
+  var startParamList = [
+  {
+    "method": "startServer",
+    "host": "127.0.0.1",
+    "port": 3003,
+    "targetNameList": [
+      "secondPushData"
+    ],
+    "returnValueList": [
+      {
+        "result": {
+          "code": 0,
+          "msg": "ok"
+        }
+      }
+    ]
+  }
 ];
-	var childList = [];
-	for(var i = 0, startParam; startParam = startParamList[i]; i++){
-		var child = await forkServer(forkFile, startParam);
-		childList.push(child);
-	}
+  var childList = [];
+  for(var i = 0, startParam; startParam = startParamList[i]; i++){
+    var child = await forkServer(forkFile, startParam);
+    childList.push(child);
+  }
 
-	// 执行业务逻辑
-	var cacheData = {};
-	var cacheRoot = "C:\\work\\GFS2\\AppData\\chunkserver\\cache1\\";
-	var body = Buffer.from("hello girl");
-	var secondServerList = ["127.0.0.1:3003"]
-	var timestamp = 1603680283034;
-	var maxChunkSize = 3;
-	var result = await clientHandler.primaryPushData(cacheData, cacheRoot, body, secondServerList, timestamp, maxChunkSize);
+  // run
+  var cacheData = {};
+  var cacheRoot = "C:\\work\\GFS2\\AppData\\chunkserver\\cache1\\";
+  var body = Buffer.from("hello girl");
+  var secondServerList = ["127.0.0.1:3003"]
+  var timestamp = 1603680283034;
+  var maxChunkSize = 3;
+  var result = await clientHandler.primaryPushData(cacheData, cacheRoot, body, secondServerList, timestamp, maxChunkSize);
 
-	// 向子进程发送退出指令
+  // send to exit
 
-	return result;
+  return result;
 // END
 };
 
@@ -87,38 +84,38 @@ exports.primaryPushData = async function(){
 // primary receive client request to write
 exports.primaryWrite = async function(){
 // START
-	reload();
+  reload();
 
-	// 启动测试服务端子进程
-	var forkFile = "C:\\work\\CodeDesign\\server\\resource\\netServer.js";
-	var startParamList = [
-	{
-		"method": "startServer",
-		"host": "127.0.0.1",
-		"port": 3002,
-		"targetNameList": [
-			"secondWrite"
-		],
-		"returnValueList": [
-			{
-				"result": {
-					"code": 0,
-					"msg": ""
-				},
-				"bigData": ""
-			}
-		]
-	}
+  // start subProcess
+  var forkFile = "C:\\work\\CodeDesign\\server\\resource\\netServer.js";
+  var startParamList = [
+  {
+    "method": "startServer",
+    "host": "127.0.0.1",
+    "port": 3002,
+    "targetNameList": [
+      "secondWrite"
+    ],
+    "returnValueList": [
+      {
+        "result": {
+          "code": 0,
+          "msg": ""
+        },
+        "bigData": ""
+      }
+    ]
+  }
 ];
-	var childList = [];
-	for(var i = 0, startParam; startParam = startParamList[i]; i++){
-		var child = await forkServer(forkFile, startParam);
-		childList.push(child);
-	}
+  var childList = [];
+  for(var i = 0, startParam; startParam = startParamList[i]; i++){
+    var child = await forkServer(forkFile, startParam);
+    childList.push(child);
+  }
 
 
-	// 准备测试依赖的文件资源
-	var fileList = [
+  // ready file dependent on to test
+  var fileList = [
     {
         "filePath": "C:\\work\\GFS2\\AppData\\chunkserver\\cache1\\key123456",
         "fileContent": "hello girl"
@@ -136,32 +133,32 @@ exports.primaryWrite = async function(){
         "fileContent": ""
     }
 ];
-	fileList.forEach(item => {
-		fs.writeFileSync(item.filePath, item.fileContent);
-	});
+  fileList.forEach(item => {
+    fs.writeFileSync(item.filePath, item.fileContent);
+  });
 
-	// 执行业务逻辑
-	var chunkData = {"ad4e67f0b01f550d9e9c33e548ce971b2e2112ae3c695af3b01ba3639268375b":[0, 1602691021717]};
-	var cacheData = {"key123456":[10, 1603641721707, 0]};
-	var checksumData = {"ad4e67f0b01f550d9e9c33e548ce971b2e2112ae3c695af3b01ba3639268375b":[ 0, [0] ] };
-	var chunkversionData = {"ad4e67f0b01f550d9e9c33e548ce971b2e2112ae3c695af3b01ba3639268375b":[0, 1]};
-	var errorData = {};
-	var cacheRoot = "C:\\work\\GFS2\\AppData\\chunkserver\\cache1\\";
-	var cacheKey = "key123456";
-	var chunkRoot = "C:\\work\\GFS2\\AppData\\chunkserver\\chunk1\\";
-	var chunkName = "ad4e67f0b01f550d9e9c33e548ce971b2e2112ae3c695af3b01ba3639268375b";
-	var version = 1;
-	var startPos = 0;
-	var secondServerList = ["127.0.0.1:3002", "127.0.0.1:3003"]
-	var timestamp = 1603641721707;
-	var blockSize = 65536;
-	var checksumPath = "C:\\work\\GFS2\\AppData\\chunkserver\\checksum1\\data";
-	var versionPath = "C:\\work\\GFS2\\AppData\\chunkserver\\version1\\data";
-	var result = await clientHandler.primaryWrite(chunkData, cacheData, checksumData, chunkversionData, errorData, cacheRoot, cacheKey, chunkRoot, chunkName, version, startPos, secondServerList, timestamp, blockSize, checksumPath, versionPath);
+  // run
+  var chunkData = {"ad4e67f0b01f550d9e9c33e548ce971b2e2112ae3c695af3b01ba3639268375b":[0, 1602691021717]};
+  var cacheData = {"key123456":[10, 1603641721707, 0]};
+  var checksumData = {"ad4e67f0b01f550d9e9c33e548ce971b2e2112ae3c695af3b01ba3639268375b":[ 0, [0] ] };
+  var chunkversionData = {"ad4e67f0b01f550d9e9c33e548ce971b2e2112ae3c695af3b01ba3639268375b":[0, 1]};
+  var errorData = {};
+  var cacheRoot = "C:\\work\\GFS2\\AppData\\chunkserver\\cache1\\";
+  var cacheKey = "key123456";
+  var chunkRoot = "C:\\work\\GFS2\\AppData\\chunkserver\\chunk1\\";
+  var chunkName = "ad4e67f0b01f550d9e9c33e548ce971b2e2112ae3c695af3b01ba3639268375b";
+  var version = 1;
+  var startPos = 0;
+  var secondServerList = ["127.0.0.1:3002", "127.0.0.1:3003"]
+  var timestamp = 1603641721707;
+  var blockSize = 65536;
+  var checksumPath = "C:\\work\\GFS2\\AppData\\chunkserver\\checksum1\\data";
+  var versionPath = "C:\\work\\GFS2\\AppData\\chunkserver\\version1\\data";
+  var result = await clientHandler.primaryWrite(chunkData, cacheData, checksumData, chunkversionData, errorData, cacheRoot, cacheKey, chunkRoot, chunkName, version, startPos, secondServerList, timestamp, blockSize, checksumPath, versionPath);
 
-	// 向子进程发送退出指令
+  // send to exit
 
-	return result;
+  return result;
 // END
 };
 
@@ -169,33 +166,33 @@ exports.primaryWrite = async function(){
 // client read chunk content
 exports.readChunk = async function(){
 // START
-	reload();
+  reload();
 
-	// 准备测试依赖的文件资源
-	var fileList = [
+  // ready file dependent on to test
+  var fileList = [
     {
         "filePath": "C:\\work\\GFS2\\AppData\\chunkserver\\chunk2\\ad4e67f0b01f550d9e9c33e548ce971b2e2112ae3c695af3b01ba3639268375b",
         "fileContent": "hello girl"
     }
 ];
-	fileList.forEach(item => {
-		fs.writeFileSync(item.filePath, item.fileContent);
-	});
+  fileList.forEach(item => {
+    fs.writeFileSync(item.filePath, item.fileContent);
+  });
 
-	// 执行业务逻辑
-	var chunkData = {"ad4e67f0b01f550d9e9c33e548ce971b2e2112ae3c695af3b01ba3639268375b":[11, 1602691021717]};
-	var checksumData = {"ad4e67f0b01f550d9e9c33e548ce971b2e2112ae3c695af3b01ba3639268375b":[ 0, [2089148645] ] };
-	var chunkversionData = {"ad4e67f0b01f550d9e9c33e548ce971b2e2112ae3c695af3b01ba3639268375b":[0, 66]};
-	var errorData = {};
-	var chunkRoot = "C:\\work\\GFS2\\AppData\\chunkserver\\chunk2\\";
-	var chunkName = "ad4e67f0b01f550d9e9c33e548ce971b2e2112ae3c695af3b01ba3639268375b";
-	var version = 66;
-	var startPos = 2;
-	var length = 4;
-	var blockSize = 65536;
-	var result = await clientHandler.readChunk(chunkData, checksumData, chunkversionData, errorData, chunkRoot, chunkName, version, startPos, length, blockSize);
+  // run
+  var chunkData = {"ad4e67f0b01f550d9e9c33e548ce971b2e2112ae3c695af3b01ba3639268375b":[11, 1602691021717]};
+  var checksumData = {"ad4e67f0b01f550d9e9c33e548ce971b2e2112ae3c695af3b01ba3639268375b":[ 0, [2089148645] ] };
+  var chunkversionData = {"ad4e67f0b01f550d9e9c33e548ce971b2e2112ae3c695af3b01ba3639268375b":[0, 66]};
+  var errorData = {};
+  var chunkRoot = "C:\\work\\GFS2\\AppData\\chunkserver\\chunk2\\";
+  var chunkName = "ad4e67f0b01f550d9e9c33e548ce971b2e2112ae3c695af3b01ba3639268375b";
+  var version = 66;
+  var startPos = 2;
+  var length = 4;
+  var blockSize = 65536;
+  var result = await clientHandler.readChunk(chunkData, checksumData, chunkversionData, errorData, chunkRoot, chunkName, version, startPos, length, blockSize);
 
-	return result;
+  return result;
 // END
 };
 
@@ -203,64 +200,64 @@ exports.readChunk = async function(){
 // client request primary append content
 exports.primaryAppend = async function(){
 // START
-	reload();
+  reload();
 
-	// 启动测试服务端子进程
-	var forkFile = "C:\\work\\CodeDesign\\server\\resource\\netServer.js";
-	var startParamList = [
-	{
-		"method": "startServer",
-		"host": "127.0.0.1",
-		"port": 3000,
-		"targetNameList": [
-			"getLastChunkName"
-		],
-		"returnValueList": [
-			{
-				"result": {
-					"code": 0,
-					"data": {
-						"startTime": 1603641721707,
-						"chunkName": "ad4e67f0b01f550d9e9c33e548ce971b2e2112ae3c695af3b01ba3639268375b"
-					}
-				}
-			}
-		]
-	},
-	{
-		"method": "startServer",
-		"host": "127.0.0.1",
-		"port": 3002,
-		"targetNameList": [
-			"secondGuarantee",
-			"secondAppend"
-		],
-		"returnValueList": [
-			{
-				"result": {
-					"code": 0,
-					"data": {
-						"maxSize": 0
-					}
-				}
-			},
-			{
-				"result": {
-					"code": 0
-				}
-			}
-		]
-	}
+  // start subProcess
+  var forkFile = "C:\\work\\CodeDesign\\server\\resource\\netServer.js";
+  var startParamList = [
+  {
+    "method": "startServer",
+    "host": "127.0.0.1",
+    "port": 3000,
+    "targetNameList": [
+      "getLastChunkName"
+    ],
+    "returnValueList": [
+      {
+        "result": {
+          "code": 0,
+          "data": {
+            "startTime": 1603641721707,
+            "chunkName": "ad4e67f0b01f550d9e9c33e548ce971b2e2112ae3c695af3b01ba3639268375b"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "method": "startServer",
+    "host": "127.0.0.1",
+    "port": 3002,
+    "targetNameList": [
+      "secondGuarantee",
+      "secondAppend"
+    ],
+    "returnValueList": [
+      {
+        "result": {
+          "code": 0,
+          "data": {
+            "maxSize": 0
+          }
+        }
+      },
+      {
+        "result": {
+          "code": 0
+        }
+      }
+    ]
+  }
 ];
-	var childList = [];
-	for(var i = 0, startParam; startParam = startParamList[i]; i++){
-		var child = await forkServer(forkFile, startParam);
-		childList.push(child);
-	}
+  var childList = [];
+  for(var i = 0, startParam; startParam = startParamList[i]; i++){
+    var child = await forkServer(forkFile, startParam);
+    childList.push(child);
+  }
 
 
-	// 准备测试依赖的文件资源
-	var fileList = [
+  // ready file dependent on to test
+  var fileList = [
     {
         "filePath": "C:\\work\\GFS2\\AppData\\chunkserver\\cache1\\key123456",
         "fileContent": "hello girl"
@@ -278,33 +275,33 @@ exports.primaryAppend = async function(){
         "fileContent": "ad4e67f0b01f550d9e9c33e548ce971b2e2112ae3c695af3b01ba3639268375b,0001,000000000000------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------;"
     }
 ];
-	fileList.forEach(item => {
-		fs.writeFileSync(item.filePath, item.fileContent);
-	});
+  fileList.forEach(item => {
+    fs.writeFileSync(item.filePath, item.fileContent);
+  });
 
-	// 执行业务逻辑
-	var chunkData = {"ad4e67f0b01f550d9e9c33e548ce971b2e2112ae3c695af3b01ba3639268375b":[0, 1602691021717]};
-	var cacheData = {"key123456":[10, 1603641721707, 0]};
-	var checksumData = {"ad4e67f0b01f550d9e9c33e548ce971b2e2112ae3c695af3b01ba3639268375b":[ 0, [0] ] };
-	var chunkversionData = {"ad4e67f0b01f550d9e9c33e548ce971b2e2112ae3c695af3b01ba3639268375b":[0, 1]};
-	var errorData = {};
-	var masterData = {"startTime":1603641721707};
-	var filePath = "/usr/data/1.txt";
-	var cacheRoot = "C:\\work\\GFS2\\AppData\\chunkserver\\cache1\\";
-	var cacheKey = "key123456";
-	var chunkRoot = "C:\\work\\GFS2\\AppData\\chunkserver\\chunk1\\";
-	var version = 1;
-	var secondServerList = ["127.0.0.1:3002", "127.0.0.1:3003"]
-	var timestamp = 1603641721707;
-	var blockSize = 65536;
-	var maxChunkSize = 100;
-	var masterHost = "127.0.0.1";
-	var masterPort = 3000;
-	var checksumPath = "C:\\work\\GFS2\\AppData\\chunkserver\\checksum1\\data";
-	var result = await clientHandler.primaryAppend(chunkData, cacheData, checksumData, chunkversionData, errorData, masterData, filePath, cacheRoot, cacheKey, chunkRoot, version, secondServerList, timestamp, blockSize, maxChunkSize, masterHost, masterPort, checksumPath);
+  // run
+  var chunkData = {"ad4e67f0b01f550d9e9c33e548ce971b2e2112ae3c695af3b01ba3639268375b":[0, 1602691021717]};
+  var cacheData = {"key123456":[10, 1603641721707, 0]};
+  var checksumData = {"ad4e67f0b01f550d9e9c33e548ce971b2e2112ae3c695af3b01ba3639268375b":[ 0, [0] ] };
+  var chunkversionData = {"ad4e67f0b01f550d9e9c33e548ce971b2e2112ae3c695af3b01ba3639268375b":[0, 1]};
+  var errorData = {};
+  var masterData = {"startTime":1603641721707};
+  var filePath = "/usr/data/1.txt";
+  var cacheRoot = "C:\\work\\GFS2\\AppData\\chunkserver\\cache1\\";
+  var cacheKey = "key123456";
+  var chunkRoot = "C:\\work\\GFS2\\AppData\\chunkserver\\chunk1\\";
+  var version = 1;
+  var secondServerList = ["127.0.0.1:3002", "127.0.0.1:3003"]
+  var timestamp = 1603641721707;
+  var blockSize = 65536;
+  var maxChunkSize = 100;
+  var masterHost = "127.0.0.1";
+  var masterPort = 3000;
+  var checksumPath = "C:\\work\\GFS2\\AppData\\chunkserver\\checksum1\\data";
+  var result = await clientHandler.primaryAppend(chunkData, cacheData, checksumData, chunkversionData, errorData, masterData, filePath, cacheRoot, cacheKey, chunkRoot, version, secondServerList, timestamp, blockSize, maxChunkSize, masterHost, masterPort, checksumPath);
 
-	// 向子进程发送退出指令
+  // send to exit
 
-	return result;
+  return result;
 // END
 };

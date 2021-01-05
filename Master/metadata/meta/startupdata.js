@@ -1,10 +1,8 @@
 
-// 启动数据
-/**
-{"state":"init","startTime":0,"serverChecklist":["127.0.0.1:3001","127.0.0.1:3002","127.0.0.1:3003"]}
- */
+// start data
+
 const metadata = {
-  // 'startTime': 0, // Master启动时间戳（毫秒）
+  // 'startTime': 0,
   // 'serverChecklist': ["127.0.0.1:3001", "127.0.0.1:3002", "127.0.0.1:3003"]
 };
 

@@ -61,12 +61,12 @@ const {secondaryAPI} = require('../callapi');
  * @localPort            {Number} local port, @example 3002
  * @checksumPath         {String} path of file to save checksum of chunk, @example "C:\work\GFS2\AppData\chunkserver\checksum2\data"
  * @versionPath          {String} path of file to save version of chunk, @example "C:\work\GFS2\AppData\chunkserver\version2\data"
- * @return               {Array}  返回值, @example [{"code":0}]
+ * @return               {Array}  return value, @example [{"code":0}]
  */
 exports.secondCreateChunk = async function( chunkData, checksumData, checksumFreeData, chunkversionData, chunkversionFreeData, chunkName, version, secondServerList, blockSize, chunkRoot, localHost, localPort, checksumPath, versionPath ){
 // START
   log.args( Error(), arguments );
-  
+
   let result = {};
 
   /* the same chunkName MUST is not exists */
@@ -76,11 +76,11 @@ exports.secondCreateChunk = async function( chunkData, checksumData, checksumFre
   }
 
   /* create new empty chunk */
-  result = chunkdataPersist.create( chunkRoot, chunkName ); /* 新建空白块 */
+  result = chunkdataPersist.create( chunkRoot, chunkName );
   if( 0 != result.code ){
     return [result];
   }
-  chunkdataTool.add( chunkData, chunkName, 0 ); /* 存入内存 */
+  chunkdataTool.add( chunkData, chunkName, 0 );
 
   /* create checksum of chunk */
   let contentData = Buffer.from('');
@@ -131,12 +131,12 @@ exports.secondCreateChunk = async function( chunkData, checksumData, checksumFre
  * @body             {Buffer} big data, @example Buffer.from("fefe")
  * @secondServerList {Array}  list of secondary chunkservers, @example ["127.0.0.1:3002", "127.0.0.1:3003"]
  * @timestamp        {Number} current timestamp, @example 1605446899821
- * @return           {Array}  返回值, @example [{"code":0, "data":10}]
+ * @return           {Array}  return value, @example [{"code":0, "data":10}]
  */
 exports.secondPushData = async function( cacheData, cacheRoot, cacheKey, body, secondServerList, timestamp ){
 // START
   log.args( Error(), arguments );
-  
+
   let result = {};
 
   /* clear timeout or used data */
@@ -188,12 +188,12 @@ exports.secondPushData = async function( cacheData, cacheRoot, cacheKey, body, s
  * @blockSize        {Number} block size for checksum, @example 65536
  * @timestamp        {Number} current timestamp, @example 1603641721707
  * @checksumPath     {String} path of file to save checksum of chunk, @example "C:\work\GFS2\AppData\chunkserver\checksum2\data"
- * @return           {Array}  返回值, @example [{"code":0, "data":10}]
+ * @return           {Array}  return value, @example [{"code":0, "data":10}]
  */
 exports.secondWrite = async function( chunkData, checksumData, chunkversionData, cacheData, errorData, cacheRoot, cacheKey, chunkRoot, chunkName, version, startPos, secondServerList, blockSize, timestamp, checksumPath ){
 // START
   log.args( Error(), arguments );
-  
+
   clog( '----primaryHandler.secondWrite->start' );
 
   let result = {}, cacheContent, contentData;
@@ -284,7 +284,7 @@ exports.secondWrite = async function( chunkData, checksumData, chunkversionData,
   }
 
   /* set cache used time */
-  cachedataTool.setUsedTime( cacheData, cacheKey, timestamp ); /* 修改cacheData状态 */
+  cachedataTool.setUsedTime( cacheData, cacheKey, timestamp );
 
   util.success( result );
 
@@ -313,7 +313,7 @@ exports.secondWrite = async function( chunkData, checksumData, chunkversionData,
  * @secondServerList {Array}  list of secondary chunkservers, @example ["127.0.0.1:3003"]
  * @blockSize        {Number} block size for checksum, @example 65536
  * @maxChunkSize     {Number} max size of chunk, @example 65536
- * @return           {Array}  返回值, @example [{"code":0, "data":{"maxSize":10}}]
+ * @return           {Array}  return value, @example [{"code":0, "data":{"maxSize":10}}]
  */
 exports.secondGuarantee = async function( chunkData, cacheData, checksumData, chunkversionData, errorData, chunkRoot, chunkName, cacheKey, privSize, version, secondServerList, blockSize, maxChunkSize ){
 // START
@@ -394,12 +394,12 @@ exports.secondGuarantee = async function( chunkData, cacheData, checksumData, ch
  * @chunkName        {String} name of chunk, @example "aabbccdd"
  * @targetSize       {Number} the target size to padding to, @example 30
  * @secondServerList {Array}  list of secondary chunkservers, @example ["127.0.0.1:3003"]
- * @return           {Array}  返回值, @example [{"code":0, "msg":""}]
+ * @return           {Array}  return value, @example [{"code":0, "msg":""}]
  */
 exports.secondPadding = async function( chunkRoot, chunkName, targetSize, secondServerList ){
 // START
   log.args( Error(), arguments );
-  
+
   let result = {};
 
   /* padding */
@@ -440,12 +440,12 @@ exports.secondPadding = async function( chunkRoot, chunkName, targetSize, second
  * @timestamp        {Number} current timestamp, @example 1603641721707
  * @blockSize        {Number} block size for checksum, @example 65536
  * @checksumPath     {String} path of file to save checksum of chunk, @example "C:\work\GFS2\AppData\chunkserver\checksum2\data"
- * @return           {Array}  Return value, @example [{"code":0, "data":{"startPos":0}}]
+ * @return           {Array}  return value, @example [{"code":0, "data":{"startPos":0}}]
  */
 exports.secondAppend = async function( chunkData, checksumData, cacheData, cacheRoot, cacheKey, chunkRoot, chunkName, secondServerList, timestamp, blockSize, checksumPath ){
 // START
   log.args( Error(), arguments );
-  
+
   let result = {}, contentCache, startPos;
 
   /* check cache is empty or not */
@@ -480,7 +480,7 @@ exports.secondAppend = async function( chunkData, checksumData, cacheData, cache
   if(0 != result.code){ return [result]; }
 
   /* set cache use time */
-  cachedataTool.setUsedTime(cacheData, cacheKey, timestamp); /* 标记为已使用状态 */
+  cachedataTool.setUsedTime(cacheData, cacheKey, timestamp);
 
   /* pass to next chunkserver */
   if( secondServerList.length ){
@@ -509,12 +509,12 @@ exports.secondAppend = async function( chunkData, checksumData, cacheData, cache
  * @secondServerList {Array}  list of secondary chunkservers, @example ["127.0.0.1:3003"]
  * @timestamp        {Number} current timestamp, @example 1602576896653
  * @versionPath      {String} path of file to save version of chunk, @example "C:\work\GFS2\AppData\chunkserver\version2\data"
- * @return           {Array}  返回值, @example [{"code":0, "msg":""}]
+ * @return           {Array}  return value, @example [{"code":0, "msg":""}]
  */
 exports.secondSetVersion = async function( chunkData, chunkversionData, chunkName, version, secondServerList, timestamp, versionPath ){
 // START
   log.args( Error(), arguments );
-  
+
   let result = {};
 
   /* check chunkName is exists or not */
@@ -524,8 +524,8 @@ exports.secondSetVersion = async function( chunkData, chunkversionData, chunkNam
   }
 
   /* handle version */
-  let itemIndex = chunkversionTool.setVersion( chunkversionData, chunkName, version ); /* 修改内存变量 */
-  result = chunkversionPersist.setVersion( chunkName, version, versionPath, itemIndex ); /* 修改磁盘文件 */
+  let itemIndex = chunkversionTool.setVersion( chunkversionData, chunkName, version );
+  result = chunkversionPersist.setVersion( chunkName, version, versionPath, itemIndex );
   if( 0 != result.code ){
     return [result];
   };

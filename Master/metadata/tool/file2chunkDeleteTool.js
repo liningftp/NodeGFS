@@ -27,7 +27,7 @@ const {clog, log, jsons} = require('../../../base');
  * @filePath             {String} file path of system, @example "/usr/data/001"
  * @chunkNameList        {Array}  list of chunkName, @example ["aabbccdd", "eeffgghh"]
  * @timestamp            {Number} time stamp, @example 1599221725369
- * @return               {String} 返回值, @example /usr/data/001|1597879274447
+ * @return               {String} return value, @example /usr/data/001|1597879274447
  */
 exports.add = function( file2chunkDeleteData, filePath, chunkNameList, timestamp ){
 // START
@@ -49,7 +49,7 @@ exports.add = function( file2chunkDeleteData, filePath, chunkNameList, timestamp
  * @file2chunkDeleteData {JSON}   file2chunkData to be deleted, @example {"/usr/data/001":{"1597879274447":["aabbcdd","eeffgghh"]}}
  * @filePath             {String} file path of system, @example "/usr/data/001"
  * @timestamp            {Number} time stamp, @example 1597879274447
- * @return               {Array}  返回值, @example ['aabbcdd', 'eeffgghh']
+ * @return               {Array}  return value, @example ['aabbcdd', 'eeffgghh']
  */
 exports.get = function( file2chunkDeleteData, filePath, timestamp ){
 // START

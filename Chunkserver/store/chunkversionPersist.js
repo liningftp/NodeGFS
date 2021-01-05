@@ -17,9 +17,9 @@
 // START
 const {utilfs, clog, jsonlog} = require('../../base');
 
-const nameLen = 64; // 块名称所占字节数, 64
-const verLen = 8; // 分隔符所在字节数, 8
-const unitLen = nameLen + 1 + verLen + 1; // 单位长度为字节数, 74
+const nameLen = 64;
+const verLen = 8;
+const unitLen = nameLen + 1 + verLen + 1;
 // END
 // REQUIRE_END
 
@@ -85,11 +85,9 @@ exports.addChunk = function( chunkName, version, versionPath, itemIndex ){
   let content = exports.encode(chunkName, version);
   if( /^\d+$/.test(itemIndex) ){
     let baseStart = parseInt(itemIndex) * unitLen;
-    // 在指定位置写入该chunk的校验和信息
     [result.code, result.msg] = utilfs.override(versionPath, content, baseStart);
   }
   else{
-    // 写入磁盘文件
     [result.code, result.msg] = utilfs.appendSync(versionPath, content);
   }
 
@@ -115,7 +113,6 @@ exports.deleteChunk = function( itemIndex, versionPath ){
 
   let baseStart = itemIndex * unitLen;
   let content = '0'.repeat(unitLen - 1) + ';';
-  // 重新写入该chunk的校验和信息
   [result.code, result.msg] = utilfs.override(versionPath, content, baseStart);
 
   return result;
@@ -138,7 +135,6 @@ exports.setVersion = function( chunkName, version, versionPath, itemIndex ){
 
   let baseStart = parseInt(itemIndex) * unitLen;
   let content = exports.encode(chunkName, version);
-  // 在指定位置写入该chunk的校验和信息
   [result.code, result.msg] = utilfs.override( versionPath, content, baseStart );
 
   if(0 != result.code){
@@ -183,7 +179,6 @@ exports.decode = function( encodedContent ){
 
   let chunkName = contentStr.slice(nameStart, nameStart + nameLen);
   let version = 0;
-  // 块名位置全为0，表示块被擦除后，空闲出来的位置，可以重复使用
   if( /^0+$/.test(chunkName) ){
     chunkName = '';
   }

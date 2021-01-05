@@ -1,7 +1,6 @@
 
-// 等待块服务器确认租约
 const metadata = {
-  // "aabbccdd": [1599701518196, socket1, socket2, ..], // 开始发出分配租约的时间戳
+  // "aabbccdd": [1599701518196, socket1, socket2, ..],
   // ..
 };
 

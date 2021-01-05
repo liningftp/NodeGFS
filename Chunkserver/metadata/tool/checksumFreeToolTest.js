@@ -2,35 +2,32 @@
 const fs = require("fs");
 const child_process = require("child_process");
 
-// 后面会重复加载，这里不能使用const声明
-let checksumFreeTool = require("C:\\work\\GFS2\\Chunkserver\\metadata\\tool\\checksumFreeTool.js");
+let checksumFreeTool = require("C:\\work\\Git_work\\NodeGFS\\Chunkserver\\metadata\\tool\\checksumFreeTool.js");
 
 
 ////////////////////////////////////////////////////////////////////////////////
 
-// 重新载入模块
 function reload(){
-	delete require.cache[require.resolve("C:\\work\\GFS2\\Chunkserver\\metadata\\tool\\checksumFreeTool.js")]
-	checksumFreeTool = require("C:\\work\\GFS2\\Chunkserver\\metadata\\tool\\checksumFreeTool.js");
+  delete require.cache[require.resolve("C:\\work\\Git_work\\NodeGFS\\Chunkserver\\metadata\\tool\\checksumFreeTool.js")]
+  checksumFreeTool = require("C:\\work\\Git_work\\NodeGFS\\Chunkserver\\metadata\\tool\\checksumFreeTool.js");
 }
 
 
-// 创建子进程服务器端
 async function forkServer(forkFile, startParam){
-	var child = child_process.fork(forkFile);
+  var child = child_process.fork(forkFile);
 
-	return	new Promise( (resolve, reject) => {
-		child.on("message", (result) => {
-			if("onload" == result.state){
-				child.send(startParam);
-			}
-			else if("started" == result.state){
-				resolve(child);
-			}
-			else{
-			}
-		});
-	});
+  return  new Promise( (resolve, reject) => {
+    child.on("message", (result) => {
+      if("onload" == result.state){
+        child.send(startParam);
+      }
+      else if("started" == result.state){
+        resolve(child);
+      }
+      else{
+      }
+    });
+  });
 
 }
 
@@ -40,12 +37,12 @@ async function forkServer(forkFile, startParam){
 // get free index
 exports.getFreeIndex = function(){
 // START
-	reload();
-	// 执行业务逻辑
-	var checksumFreeData = [2, 3]
-	var result = checksumFreeTool.getFreeIndex(checksumFreeData);
+  reload();
+  // run
+  var checksumFreeData = [2, 3]
+  var result = checksumFreeTool.getFreeIndex(checksumFreeData);
 
-	return result;
+  return result;
 // END
 };
 
@@ -53,13 +50,13 @@ exports.getFreeIndex = function(){
 // delete free index
 exports.delete = function(){
 // START
-	reload();
-	// 执行业务逻辑
-	var checksumFreeData = [2, 3]
-	var freeIndex = 2;
-	var result = checksumFreeTool.delete(checksumFreeData, freeIndex);
+  reload();
+  // run
+  var checksumFreeData = [2, 3]
+  var freeIndex = 2;
+  var result = checksumFreeTool.delete(checksumFreeData, freeIndex);
 
-	return result;
+  return result;
 // END
 };
 
@@ -67,12 +64,12 @@ exports.delete = function(){
 // add free index
 exports.add = function(){
 // START
-	reload();
-	// 执行业务逻辑
-	var checksumFreeData = []
-	var freeIndex = 1;
-	var result = checksumFreeTool.add(checksumFreeData, freeIndex);
+  reload();
+  // run
+  var checksumFreeData = []
+  var freeIndex = 1;
+  var result = checksumFreeTool.add(checksumFreeData, freeIndex);
 
-	return result;
+  return result;
 // END
 };

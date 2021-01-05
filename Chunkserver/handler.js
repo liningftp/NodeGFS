@@ -51,7 +51,7 @@ const masterHandler = require('./business/masterHandler.js');
  * client read chunk content
  * @head   {JSON}   request params, @example {"method":"readChunk","chunkName":"ad4e67f0b01f550d9e9c33e548ce971b2e2112ae3c695af3b01ba3639268375b","startPos":2,"length":4,"version":66}
  * @body   {Buffer} big data, @example Buffer.from("")
- * @return {Array}  Return value, @example [{"code":0, "msg":""}, []]
+ * @return {Array}  return value, @example [{"code":0, "msg":""}, []]
  */
 exports.readChunk = async function( head, body ){
 // START
@@ -92,7 +92,7 @@ exports.readChunk = async function( head, body ){
  * client request primary append content
  * @head   {JSON}   request params, @example {"method":"primaryAppend","filePath":"/usr/data/1.txt","secondServerList":["127.0.0.1:3002","127.0.0.1:3003"],"cacheKey":"key123456","version":1}
  * @body   {Buffer} big data, @example Buffer.from("")
- * @return {Array}  Return value, @example [ {"code":0,"data":{"startPos":0}} ]
+ * @return {Array}  return value, @example [ {"code":0,"data":{"startPos":0}} ]
  */
 exports.primaryAppend = async function( head, body ){
 // START
@@ -149,7 +149,7 @@ exports.primaryAppend = async function( head, body ){
  * client push data to primary
  * @head   {JSON}   request params, @example {"method":"primaryPushData","secondServerList":["127.0.0.1:3003"]}
  * @body   {Buffer} big data, @example Buffer.from("hello girl")
- * @return {Array}  返回值, @example [{"code":0, "data":{"cacheKey":"key123456"}}]
+ * @return {Array}  return value, @example [{"code":0, "data":{"cacheKey":"key123456"}}]
  */
 exports.primaryPushData = async function( head, body ){
 // START
@@ -181,7 +181,7 @@ exports.primaryPushData = async function( head, body ){
  * append content data to chunk according to primary
  * @head   {JSON}   request params, @example {"method":"secondAppend","chunkName":"ad4e67f0b01f550d9e9c33e548ce971b2e2112ae3c695af3b01ba3639268375b","secondServerList":["127.0.0.1:3003"],"cacheKey":"key123456"}
  * @body   {Buffer} big data, @example Buffer.from("")
- * @return {Array}  Return value, @example [{"code":0, "data":{"startPos":0}}]
+ * @return {Array}  return value, @example [{"code":0, "data":{"startPos":0}}]
  */
 exports.secondAppend = async function( head, body ){
 // START
@@ -224,7 +224,7 @@ exports.secondAppend = async function( head, body ){
  * primay push data to secondary
  * @head   {JSON}   request params, @example {"method":"secondPushData","secondServerList":["127.0.0.1:3002","127.0.0.1:3003"],"cacheKey":"key123456"}
  * @body   {Buffer} big data, @example Buffer.from("fefe")
- * @return {Array}  返回值, @example [{"code":0, "data":10}]
+ * @return {Array}  return value, @example [{"code":0, "data":10}]
  */
 exports.secondPushData = async function( head, body ){
 // START
@@ -256,7 +256,7 @@ exports.secondPushData = async function( head, body ){
  * primary receive client request to write
  * @head   {JSON}   request params, @example {"method":"primaryWrite","secondServerList":["127.0.0.1:3002","127.0.0.1:3003"],"cacheKey":"key123456","chunkName":"ad4e67f0b01f550d9e9c33e548ce971b2e2112ae3c695af3b01ba3639268375b","startPos":0,"version":1}
  * @body   {Buffer} big data, @example Buffer.from("")
- * @return {Array}  Return value, @example [ {"code":0,"msg":""} ]
+ * @return {Array}  return value, @example [ {"code":0,"msg":""} ]
  */
 exports.primaryWrite = async function( head, body ){
 // START
@@ -309,7 +309,7 @@ exports.primaryWrite = async function( head, body ){
  * write content data according to primary
  * @head   {JSON}   request params, @example {"method":"secondWrite","secondServerList":["127.0.0.1:3003"],"cacheKey":"key123456","chunkName":"ad4e67f0b01f550d9e9c33e548ce971b2e2112ae3c695af3b01ba3639268375b","version":1,"startPos":0}
  * @body   {Buffer} big data, @example Buffer.from("")
- * @return {Array}  返回值, @example [{"code":0, "data":10}]
+ * @return {Array}  return value, @example [{"code":0, "data":10}]
  */
 exports.secondWrite = async function( head, body ){
 // START
@@ -360,7 +360,7 @@ exports.secondWrite = async function( head, body ){
  * set version to secondary
  * @head   {JSON}   request params, @example {"method":"secondSetVersion","chunkName":"ad4e67f0b01f550d9e9c33e548ce971b2e2112ae3c695af3b01ba3639268375b","version":66,"secondServerList":["127.0.0.1:3003"]}
  * @body   {Buffer} big data, @example Buffer.from("")
- * @return {Array}  返回值, @example [{"code":0, "msg":""}]
+ * @return {Array}  return value, @example [{"code":0, "msg":""}]
  */
 exports.secondSetVersion = async function( head, body ){
 // START
@@ -395,7 +395,7 @@ exports.secondSetVersion = async function( head, body ){
  * master revoke lease
  * @head   {JSON}   request params, @example {"method":"revokeLease","chunkName":"eeffgghh"}
  * @body   {Buffer} big data, @example Buffer.from("")
- * @return {Array}  返回值, @example [{"code":0, "data":"aabbccdd"}]
+ * @return {Array}  return value, @example [{"code":0, "data":"aabbccdd"}]
  */
 exports.revokeLease = async function( head, body ){
 // START
@@ -422,7 +422,7 @@ exports.revokeLease = async function( head, body ){
  * guaranteeing size of all replica are same
  * @head   {JSON}   request params, @example {"method":"secondGuarantee","chunkName":"ad4e67f0b01f550d9e9c33e548ce971b2e2112ae3c695af3b01ba3639268375b","privSize":10,"secondServerList":["127.0.0.1:3003"],"version":1,"cacheKey":"key123456"}
  * @body   {Buffer} big data, @example Buffer.from("")
- * @return {Array}  返回值, @example [{"code":0, "data":{"maxSize":10}}]
+ * @return {Array}  return value, @example [{"code":0, "data":{"maxSize":10}}]
  */
 exports.secondGuarantee = async function( head, body ){
 // START
@@ -469,7 +469,7 @@ exports.secondGuarantee = async function( head, body ){
  * create a empty chunk
  * @head   {JSON}   request params, @example {"method":"secondCreateChunk","chunkName":"ad4e67f0b01f550d9e9c33e548ce971b2e2112ae3c695af3b01ba3639268375b","version":1,"secondServerList":["127.0.0.1:3002","127.0.0.1:3003"]}
  * @body   {Buffer} big data, @example Buffer.from("")
- * @return {Array}  返回值, @example [{"code":0}]
+ * @return {Array}  return value, @example [{"code":0}]
  */
 exports.secondCreateChunk = async function( head, body ){
 // START
@@ -518,7 +518,7 @@ exports.secondCreateChunk = async function( head, body ){
  * padding chunk to target size with "0"
  * @head   {JSON}   request params, @example {"method":"secondPadding","chunkName":"aabbccdd","targetSize":30,"secondServerList":["127.0.0.1:3003"]}
  * @body   {Buffer} big data, @example Buffer.from("")
- * @return {Array}  返回值, @example [{"code":0, "msg":""}]
+ * @return {Array}  return value, @example [{"code":0, "msg":""}]
  */
 exports.secondPadding = async function( head, body ){
 // START
@@ -547,7 +547,7 @@ exports.secondPadding = async function( head, body ){
  * receive lease of Master grant to primary
  * @head   {JSON}   request params, @example {"method":"recvLease","chunkName":"ad4e67f0b01f550d9e9c33e548ce971b2e2112ae3c695af3b01ba3639268375b","version":1,"primary":"127.0.0.1:3001","serverList":["127.0.0.1:3001","127.0.0.1:3002","127.0.0.1:3003"],"isNew":1}
  * @body   {Buffer} big data, @example Buffer.from("")
- * @return {Array}  Return value, @example [{"code":0}]
+ * @return {Array}  return value, @example [{"code":0}]
  */
 exports.recvLease = async function( head, body ){
 // START

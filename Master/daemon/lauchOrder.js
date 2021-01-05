@@ -46,9 +46,7 @@ const {
 exports.setNewChunk = function( file2chunkData, chunkData, filePath, chunkName, serverList, primary, version, replicaCount, timestamp ){
 // START
   log.args( Error(), arguments );
-  // B 存入文件块映射
   file2chunkTool.add( file2chunkData, filePath, chunkName );
-  // C 存入块数据中
   chunkdataTool.add( chunkData, chunkName, version, replicaCount, serverList, timestamp );
   chunkdataTool.setPrimary( chunkData, chunkName, primary, timestamp );
   chunkdataTool.setVersion( chunkData, chunkName, version );
@@ -68,7 +66,7 @@ exports.setNewChunk = function( file2chunkData, chunkData, filePath, chunkName, 
  * @version       {Number} version number, @example 1
  * @timestamp     {Number} time stamp, @example 1606639653647
  * @isNew         {Number} if chunk is new then will be created, @example 0
- * @return        {JSON}   返回值, @example {"code":0, "msg":""}
+ * @return        {JSON}   return value, @example {"code":0, "msg":""}
  */
 exports.grantLease = async function( waitleaseData, chunkName, serverList, primary, version, timestamp, isNew ){
 // START
@@ -117,7 +115,6 @@ exports.grantLease = async function( waitleaseData, chunkName, serverList, prima
         item.resolve(_result);
       }
 
-      // 删除该块对应的等待队列
       waitleaseTool.delete(waitleaseData, chunkName);
     }
   });
@@ -131,7 +128,7 @@ exports.grantLease = async function( waitleaseData, chunkName, serverList, prima
  * revoke lease of primary to run snapshot
  * @chunkData {JSON}   base info of all chunk on local, @example {"aabbccdd":[1,20,3,"127.0.0.1:3001,1600247712022","127.0.0.1:3002,1600247712022","127.0.0.1:3003,1600247712022,P"]}
  * @chunkName {String} name of chunk, @example "aabbccdd"
- * @return    {JSON}   返回值, @example {"code":0, "msg":""}
+ * @return    {JSON}   return value, @example {"code":0, "msg":""}
  */
 exports.revokeLease = async function( chunkData, chunkName ){
 // START

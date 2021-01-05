@@ -17,7 +17,7 @@
 // START
 const {util, clog} = require('../../../base/index.js');
 
-const CACHE_DURATION = 3600 * 1000; // 保留1小时
+const CACHE_DURATION = 3600 * 1000;
 // END
 // REQUIRE_END
 
@@ -69,7 +69,7 @@ exports.add = function( cacheData, cacheKey, size, timestamp ){
  * get cache size of content
  * @cacheData {JSON}   cache data, @example {"key123456":[1024,1602985006457, 0]}
  * @cacheKey  {String} key of cache, @example "key123456"
- * @return    {Number} 返回值, @example 1024
+ * @return    {Number} return value, @example 1024
  */
 exports.getSize = function( cacheData, cacheKey ){
 // START

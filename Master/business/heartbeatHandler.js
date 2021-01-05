@@ -47,7 +47,7 @@ const repairCount = 1;
  * @timestamp       {Number} time stamp, @example 1602295184323
  * @heartbeatTime   {Number} time of heartbeat, @example 60000
  * @chunkDeadTime   {Number} chunk is damage after the time, @example 86400000
- * @return          {Array}  返回值, @example [ {"code":0}, {"deleteList":[], "cloneList":[]} ]
+ * @return          {Array}  return value, @example [ {"code":0}, {"deleteList":[], "cloneList":[]} ]
  */
 exports.recvHeartbeat = async function( chunkData, serverData, chunkrepairData, startupData, pair, useRate, collectList, errorList, leaseList, startTime, timestamp, heartbeatTime, chunkDeadTime ){
 // START
@@ -113,28 +113,22 @@ exports._getCloneList = function( chunkData, chunkrepairData, repairCount, pair,
   log.args( Error(), arguments );
   let cloneList = [];
 
-  // 为了减轻服务器克隆的负担，每台服务器每次只克隆1个块
   let taskCount = 1;
   let avgRate = 50;
 
-  // 1 获取所有缺少服务器的块名称列表
   let targetPair = pair;
   let list = chunkrepairTool.getList( chunkrepairData, targetPair, repairCount, timestamp );
 
-  // 只有磁盘使用率低于平均使用率，才可以获取克隆任务
   if( useRate < avgRate ){
     for( const chunkName of list ){
-      // 要在不同的机器上执行克隆
       if( !chunkdataTool.hasPair( chunkData, chunkName, pair ) ){
         chunkdataTool.clearExpire( chunkData, chunkName, timestamp, chunkDeadTime );
-        // 执行克隆前，再次确认块状态是否OK，如果是OK，则无需再克隆
         let isGood = chunkdataTool.isGood( chunkData, chunkName, timestamp, chunkDeadTime );
         if( !isGood ){
           let version = chunkdataTool.getVersion( chunkData, chunkName );
           let serverList = chunkdataTool.getServerList( chunkData, chunkName );
           cloneList.push(`${chunkName},${version},${serverList.join(',')}`);
         }
-        // 只取指定数量的任务数
         if(taskCount === cloneList.length){
           break;
         }
@@ -174,8 +168,6 @@ exports._handleCollect = function( chunkData, chunkrepairData, startupData, coll
       chunkrepairTool.delete( chunkrepairData, chunkName );
     }
 
-    // Master启动后, chunkData中已包含整个系统所有的块名称, 所以只有存在于chunkData中才是合法的
-    // chunkData中不存在的块，直接返回删除
     if( !chunkdataTool.has( chunkData, chunkName) ){
       deleteList.push( chunkName );
     }
@@ -186,13 +178,11 @@ exports._handleCollect = function( chunkData, chunkrepairData, startupData, coll
       let repairType;
       let srcPair;
 
-      // 清理超时pair
       chunkdataTool.clearExpire( chunkData, chunkName, timestamp, chunkDeadTime );
 
-      // 已有的pair
       if( hasPair ){
         if( version >= mainVersion ){
-          chunkdataTool.updateTime( chunkData, chunkName, pair, timestamp ); /* 更新pair的时间戳 */
+          chunkdataTool.updateTime( chunkData, chunkName, pair, timestamp );
         }
         else{
           deleteList.push( chunkName );
@@ -200,7 +190,6 @@ exports._handleCollect = function( chunkData, chunkrepairData, startupData, coll
           repairType = 'error';
         }
       }
-      // 陌生pair
       else{
         if( version >= mainVersion ){
           isGood = chunkdataTool.isGood( chunkData, chunkName, timestamp, chunkDeadTime );
@@ -216,7 +205,6 @@ exports._handleCollect = function( chunkData, chunkrepairData, startupData, coll
         }
       }
 
-      // 再次检查块状态
       isGood = chunkdataTool.isGood( chunkData, chunkName, timestamp, chunkDeadTime );
       if( !isGood ){
         let state = startupdataTool.getState( startupData, timestamp, heartbeatTime );
@@ -253,7 +241,6 @@ exports._handleError = function( chunkData, chunkrepairData, errorList, pair, ti
     if( chunkdataTool.has(chunkData, chunkName) ){
       chunkdataTool.removePair(chunkData, chunkName, pair);
 
-      // 正常情况下，执行过removePair后，isGood必为false，这里为了逻辑严谨性，再进行一次检测
       let isGood = chunkdataTool.isGood(chunkData, chunkName, timestamp, chunkDeadTime);
       if( !isGood ){
         let repairType = 'error';

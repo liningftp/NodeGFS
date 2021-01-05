@@ -41,7 +41,7 @@ const {clientHandler, primaryHandler, heartbeatHandler} = require('./business');
  * open file
  * @head   {JSON}   request params, @example {"method":"open","filePath":"/usr/data/001","flags":"O_RDWR","mode":"O_APPEND"}
  * @body   {Buffer} request body, @example Buffer.from("")
- * @return {Array}  返回值, @example [{"code":0, "data":{"fd":3}, "msg":""}]
+ * @return {Array}  return value, @example [{"code":0, "data":{"fd":3}, "msg":""}]
  */
 exports.open = async function( head, body ){
 // START
@@ -74,7 +74,7 @@ exports.open = async function( head, body ){
  * close file
  * @head   {JSON}   request params, @example {"method":"close","filePath":"/usr/data/001","fd":"1600765377526"}
  * @body   {Buffer} request body, @example Buffer.from("")
- * @return {Array}  返回值, @example [{"code":0, "msg":""}]
+ * @return {Array}  return value, @example [{"code":0, "msg":""}]
  */
 exports.close = async function( head, body ){
 // START
@@ -101,7 +101,7 @@ exports.close = async function( head, body ){
  * get list of chunkserver to read
  * @head   {JSON}   request params, @example {"method":"getReadServerList","filePath":"/usr/data/001","fd":1607151913750,"index":1,"count":"3"}
  * @body   {Buffer} request body, @example Buffer.from("")
- * @return {Array}  Return value, @example [{"code":0,"data":{"3":{"chunkName":"aabbccdd","version":6,"serverList":["127.0.0.1:3001","127.0.0.1:3002","127.0.0.1:3003"]}},"msg":""}]
+ * @return {Array}  return value, @example [{"code":0,"data":{"3":{"chunkName":"aabbccdd","version":6,"serverList":["127.0.0.1:3001","127.0.0.1:3002","127.0.0.1:3003"]}},"msg":""}]
  */
 exports.getReadServerList = async function( head, body ){
 // START
@@ -140,7 +140,7 @@ exports.getReadServerList = async function( head, body ){
  * create namespace file
  * @head   {JSON}   request params, @example {"method":"createFile","filePath":"/usr/data/001","replicaCount":3}
  * @body   {Buffer} request body, @example Buffer.from("")
- * @return {Array}  返回值, @example [{"code":0, "msg":""}]
+ * @return {Array}  return value, @example [{"code":0, "msg":""}]
  */
 exports.createFile = async function( head, body ){
 // START
@@ -183,7 +183,7 @@ exports.createFile = async function( head, body ){
  * create namespace directory
  * @head   {JSON}   request params, @example {"method":"createDir","filePath":"/usr/data/001"}
  * @body   {Buffer} request body, @example Buffer.from("")
- * @return {Array}  返回值, @example [{"code":0, "msg":""}]
+ * @return {Array}  return value, @example [{"code":0, "msg":""}]
  */
 exports.createDir = async function( head, body ){
 // START
@@ -212,7 +212,7 @@ exports.createDir = async function( head, body ){
  * get list of chunkserver to append
  * @head   {JSON}   request params, @example {"method":"getAppendServerList","filePath":"/usr/data/001","fd":1606961159937}
  * @body   {Buffer} request body, @example Buffer.from("")
- * @return {Array}  Return value, @example [{"code":0,"msg":"","data":{"version":1,"primary":"127.0.0.1:3001","serverList":["127.0.0.1:3001","127.0.0.1:3002","127.0.0.1:3003"]}}]
+ * @return {Array}  return value, @example [{"code":0,"msg":"","data":{"version":1,"primary":"127.0.0.1:3001","serverList":["127.0.0.1:3001","127.0.0.1:3002","127.0.0.1:3003"]}}]
  */
 exports.getAppendServerList = async function( head, body ){
 // START
@@ -261,7 +261,7 @@ exports.getAppendServerList = async function( head, body ){
  * get list of chunkserver to write
  * @head   {JSON}   request params, @example {"method":"getWriteServerList","filePath":"/usr/data/001","index":0,"fd":1606961159937}
  * @body   {Buffer} request body, @example Buffer.from("")
- * @return {Array}  Return value, @example [{"code":0,"msg":"","data":{"version":1,"primary":"127.0.0.1:3001","serverList":["127.0.0.1:3001","127.0.0.1:3002","127.0.0.1:3003"]}}]
+ * @return {Array}  return value, @example [{"code":0,"msg":"","data":{"version":1,"primary":"127.0.0.1:3001","serverList":["127.0.0.1:3001","127.0.0.1:3002","127.0.0.1:3003"]}}]
  */
 exports.getWriteServerList = async function( head, body ){
 // START
@@ -310,7 +310,7 @@ exports.getWriteServerList = async function( head, body ){
  * run snapshot
  * @head   {JSON}   request params, @example {"method":"snapshot","filePath":"/usr/data/1.txt"}
  * @body   {Buffer} request body, @example Buffer.from("")
- * @return {Array}  返回值, @example [{"code":0}, ""]
+ * @return {Array}  return value, @example [{"code":0}, ""]
  */
 exports.snapshot = async function( head, body ){
 // START
@@ -337,7 +337,7 @@ exports.snapshot = async function( head, body ){
  * receive fullchunk from primary
  * @head   {JSON}   request params, @example {"method":"recvFullChunk","chunkName":"ad4e67f0b01f550d9e9c33e548ce971b2e2112ae3c695af3b01ba3639268375b","startTime":1602228234877,"pair":"127.0.0.1:3001"}
  * @body   {Buffer} request body, @example Buffer.from("")
- * @return {Array}  返回值, @example [{"code":0, "msg":""}]
+ * @return {Array}  return value, @example [{"code":0, "msg":""}]
  */
 exports.recvFullChunk = async function( head, body ){
 // START
@@ -368,7 +368,7 @@ exports.recvFullChunk = async function( head, body ){
  * receive error chunk from primary
  * @head   {JSON}   request params, @example {"method":"recvErrorChunk","chunkName":"ad4e67f0b01f550d9e9c33e548ce971b2e2112ae3c695af3b01ba3639268375b","startTime":1602228234877,"pair":"127.0.0.1:3001"}
  * @body   {Buffer} request body, @example Buffer.from("")
- * @return {Array}  返回值, @example [{"code":0, "msg":""}]
+ * @return {Array}  return value, @example [{"code":0, "msg":""}]
  */
 exports.recvErrorChunk = async function( head, body ){
 // START
@@ -401,7 +401,7 @@ exports.recvErrorChunk = async function( head, body ){
  * chunkserver request the last chunkName of file
  * @head   {JSON}   request params, @example {"method":"getLastChunkName","filePath":"/usr/data/001","startTime":1602228234877}
  * @body   {Buffer} request body, @example Buffer.from("")
- * @return {Array}  返回值, @example [{"code":0, "msg":"", "data":{"startTime":1596367828794,"chunkName":"eeffhhii"}}, ""]
+ * @return {Array}  return value, @example [{"code":0, "msg":"", "data":{"startTime":1596367828794,"chunkName":"eeffhhii"}}, ""]
  */
 exports.getLastChunkName = async function( head, body ){
 // START
@@ -434,7 +434,7 @@ exports.getLastChunkName = async function( head, body ){
  * receive heartbeat package
  * @head   {JSON}   request params, @example {"method":"recvHeartbeat","pair":"127.0.0.1:3002","useRate":28,"collectList":["aabbccdd,3","eeffgghh,10"],"errorList":["eeffgghh"],"leaseList":["aabbccdd"],"startTime":1593947506381}
  * @body   {Buffer} request body, @example Buffer.from("")
- * @return {Array}  返回值, @example [ {"code":0}, {"deleteList":[], "cloneList":[]} ]
+ * @return {Array}  return value, @example [ {"code":0}, {"deleteList":[], "cloneList":[]} ]
  */
 exports.recvHeartbeat = async function( head, body ){
 // START
@@ -481,7 +481,7 @@ exports.recvHeartbeat = async function( head, body ){
  * delete namespace file
  * @head   {JSON}   request params, @example {"method":"deleteFile","filePath":"/usr/data/001","fd":1606909907287}
  * @body   {Buffer} request body, @example Buffer.from("")
- * @return {Array}  返回值, @example [{"code":0, "msg":""}]
+ * @return {Array}  return value, @example [{"code":0, "msg":""}]
  */
 exports.deleteFile = async function( head, body ){
 // START
@@ -520,7 +520,7 @@ exports.deleteFile = async function( head, body ){
  * delete namespace directory
  * @head   {JSON}   request params, @example {"method":"deleteDir","filePath":"/usr/data","fd":1606961159937}
  * @body   {Buffer} request body, @example Buffer.from("")
- * @return {Array}  返回值, @example [{"code":0, "msg":""}]
+ * @return {Array}  return value, @example [{"code":0, "msg":""}]
  */
 exports.deleteDir = async function( head, body ){
 // START
@@ -555,7 +555,7 @@ exports.deleteDir = async function( head, body ){
  * receive boot data from chunkserver
  * @head   {JSON}   request params, @example {"method":"recvBootData","chunkList":["aabbccdd,2","eeffgghh,3"],"pair":"127.0.0.1:3001","useRate":25}
  * @body   {Buffer} request body, @example Buffer.from("")
- * @return {Array}  返回值, @example [{"code":0, "msg":""}]
+ * @return {Array}  return value, @example [{"code":0, "msg":""}]
  */
 exports.recvBootData = async function( head, body ){
 // START

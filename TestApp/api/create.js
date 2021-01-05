@@ -1,7 +1,7 @@
 
 /**
- * cls && node api/create.js dir /usr/data
- * cls && node api/create.js file /usr/data/001
+ * node api/create.js dir /usr/data
+ * node api/create.js file /usr/data/001
  */
 
 const {utilfs, clog, jsonlog} = require('../../base');

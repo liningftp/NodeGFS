@@ -25,7 +25,7 @@ const {lodash, clog, log, jsons} = require('../../../base');
  * set time of master
  * @masterData {JSON}   data of Master server, @example {}
  * @startTime  {Number} start time of Master server, @example 1593783888581
- * @return     {JSON}   返回值, @example {}
+ * @return     {JSON}   return value, @example {}
  */
 exports.setTime = function( masterData, startTime ){
 // START
@@ -44,7 +44,7 @@ exports.setTime = function( masterData, startTime ){
  * check is master reboot
  * @masterData {JSON}   data of Master server, @example {"startTime":1593783888581}
  * @startTime  {Number} start time of Master server, @example 1593783888581
- * @return     {Number} 返回值, @example 1
+ * @return     {Number} return value, @example 1
  */
 exports.checkTime = function( masterData, startTime ){
 // START
@@ -58,7 +58,7 @@ exports.checkTime = function( masterData, startTime ){
 /**
  * get start time of master
  * @masterData {JSON}   data of Master server, @example {"startTime":1593783888581}
- * @return     {Number} 返回值, @example 1593783888581
+ * @return     {Number} return value, @example 1593783888581
  */
 exports.getTime = function( masterData ){
 // START

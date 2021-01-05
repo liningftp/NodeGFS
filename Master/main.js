@@ -51,11 +51,8 @@ const [
 ];
 
 
-// 设置初始化时间戳
 startupdataTool.init(startupData, START_TIME);
 
-// 初始化配置
-// 获取命令行输入参数
 // node main.js -h 127.0.0.1 -p 3000 -l C:\work\GFS2\Master\log -n namespace.log
 let args = minimist(process.argv.splice(2));
 boot.init(config, args);
@@ -78,16 +75,12 @@ const [
   config.RECORD_PATH,
 ];
 
-// 初始执行日志
 log.init( logPath );
 
-// 加载日志
 operationLog.load( namespaceData, namespaceDeleteData, namespaceSnapshotData, file2chunkData, file2chunkDeleteData, file2chunkSnapshotData, chunkData, deleteRetainTime, recordPath );
 
-// 启动块管理子进程
 daemon.start( namespaceDeleteData, file2chunkDeleteData, chunkData, serverData, deleteRetainTime, heartbeatTime, chunkDeadTime );
 
-// 请求处理入口
 async function response(socket, data){
   let result = comm.decodeMessageData(data);
 
@@ -97,7 +90,6 @@ async function response(socket, data){
   log.warn( new Error(), '1 -> ' + jsons( head ) );
   log.warn( new Error(), socket.remoteAddress );
 
-  // 处理客户端、Master和Primary发来的请求
   if(handler[head.method]){
     let res = {}, bigData, message;
     let timestamp = Date.now();
@@ -139,7 +131,6 @@ async function response(socket, data){
   }
 }
 
-// 启动服务程序
 comm.createServer( masterHost, masterPort, {
   'onListen': function(host, port){
     console.log(`Master server started`);

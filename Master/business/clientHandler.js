@@ -44,7 +44,7 @@ const lauchOrder = require('../daemon/lauchOrder.js');
  * @mode          {String} type mode, O_APPEND whe flags is O_RDWR, @example "O_APPEND"
  * @timestamp     {Number} time stamp, @example 1606225666536
  * @lockDuration  {Number} lock duration, @example 300000
- * @return        {Array}  返回值, @example [{"code":0, "data":{"fd":3}, "msg":""}]
+ * @return        {Array}  return value, @example [{"code":0, "data":{"fd":3}, "msg":""}]
  */
 exports.open = async function( namespaceData, filePath, flags, mode, timestamp, lockDuration ){
 // START
@@ -127,7 +127,7 @@ exports.open = async function( namespaceData, filePath, flags, mode, timestamp, 
  * @namespaceData {JSON}   tree of namespace, @example {"/usr":{"_type":"dir","_lock":{"r":[1600765363449,1600765377526],"w":[],"a":[],"snap":[]},"/data":{"_type":"dir","_lock":{"r":[1600765363449,1600765377526],"w":[],"a":[],"snap":[]},"/001":{"_type":"file","_replicaCount":3,"_lock":{"r":[1600765363449],"w":[],"a":[],"snap":[]}}}}}
  * @filePath      {String} file path of system, @example "/usr/data/001"
  * @fd            {String} file describe as timestamp when file is opened, @example "1600765377526"
- * @return        {Array}  返回值, @example [{"code":0, "msg":""}]
+ * @return        {Array}  return value, @example [{"code":0, "msg":""}]
  */
 exports.close = async function( namespaceData, filePath, fd ){
 // START
@@ -152,7 +152,7 @@ exports.close = async function( namespaceData, filePath, fd ){
  * @filePath      {String} file path of system, @example "/usr/data/001"
  * @timestamp     {Number} time stamp, @example 1603423714256
  * @recordPath    {String} path of operate record, @example "C:\work\GFS2\AppData\master\operation.log"
- * @return        {Array}  返回值, @example [{"code":0, "msg":""}]
+ * @return        {Array}  return value, @example [{"code":0, "msg":""}]
  */
 exports.createDir = async function( namespaceData, filePath, timestamp, recordPath ){
 // START
@@ -189,7 +189,7 @@ exports.createDir = async function( namespaceData, filePath, timestamp, recordPa
  * @timestamp           {Number} time stamp, @example 1604366129450
  * @lockDuration        {Number} lock duration, @example 300000
  * @recordPath          {String} path of operate record, @example "C:\work\GFS2\AppData\master\operation.log"
- * @return              {Array}  返回值, @example [{"code":0, "msg":""}]
+ * @return              {Array}  return value, @example [{"code":0, "msg":""}]
  */
 exports.deleteDir = async function( namespaceData, namespaceDeleteData, filePath, fd, timestamp, lockDuration, recordPath ){
 // START
@@ -245,7 +245,7 @@ exports.deleteDir = async function( namespaceData, namespaceDeleteData, filePath
  * @heartbeatTime  {Number} time of heartbeat, @example 60000
  * @timestamp      {Number} time stamp, @example 1599033406152
  * @recordPath     {String} path of operate record, @example "C:\work\GFS2\AppData\master\operation.log"
- * @return         {Array}  返回值, @example [{"code":0, "msg":""}]
+ * @return         {Array}  return value, @example [{"code":0, "msg":""}]
  */
 exports.createFile = async function( namespaceData, file2chunkData, chunkData, serverData, waitleaseData, filePath, replicaCount, avgUseRate, heartbeatTime, timestamp, recordPath ){
 // START
@@ -261,7 +261,7 @@ exports.createFile = async function( namespaceData, file2chunkData, chunkData, s
 
   /* select free chunkserver for new chunk */
   let chunkName = chunkdataTool.getNewChunkName(chunkData);
-  let serverList = serverdataTool.getFree( serverData, avgUseRate, 1.5 * heartbeatTime, timestamp, [], replicaCount ); // 新选几台服务器
+  let serverList = serverdataTool.getFree( serverData, avgUseRate, 1.5 * heartbeatTime, timestamp, [], replicaCount );
 
   if( serverList.length < replicaCount ){
     util.error( result, 'SERVER_COUNT_LESS', '');
@@ -315,7 +315,7 @@ exports.createFile = async function( namespaceData, file2chunkData, chunkData, s
  * @timestamp            {Number} time stamp, @example 1604366129450
  * @lockDuration         {Number} lock duration, @example 300000
  * @recordPath           {String} path of operate record, @example "C:\work\GFS2\AppData\master\operation.log"
- * @return               {Array}  返回值, @example [{"code":0, "msg":""}]
+ * @return               {Array}  return value, @example [{"code":0, "msg":""}]
  */
 exports.deleteFile = async function( namespaceData, namespaceDeleteData, file2chunkData, file2chunkDeleteData, filePath, fd, timestamp, lockDuration, recordPath ){
 // START
@@ -386,7 +386,7 @@ exports.deleteFile = async function( namespaceData, namespaceDeleteData, file2ch
  * @chunkDeadTime  {Number} chunk is damage after the time, @example 7200000
  * @lockDuration   {Number} lock duration, @example 300000
  * @recordPath     {String} path of operate record, @example "C:\work\GFS2\AppData\master\operation.log"
- * @return         {Array}  Return value, @example [{"code":0,"msg":"","data":{"version":1,"primary":"127.0.0.1:3001","serverList":["127.0.0.1:3001","127.0.0.1:3002","127.0.0.1:3003"]}}]
+ * @return         {Array}  return value, @example [{"code":0,"msg":"","data":{"version":1,"primary":"127.0.0.1:3001","serverList":["127.0.0.1:3001","127.0.0.1:3002","127.0.0.1:3003"]}}]
  */
 exports.getWriteServerList = async function( namespaceData, file2chunkData, chunkData, serverData, waitleaseData, filePath, fd, index, maxUseRate, timestamp, heartbeatTime, chunkDeadTime, lockDuration, recordPath ){
 // START
@@ -430,15 +430,13 @@ exports.getWriteServerList = async function( namespaceData, file2chunkData, chun
   /* write in new chunk */
   else if( index == chunkCount ){
     chunkName = chunkdataTool.getNewChunkName( chunkData );
-    serverList = serverdataTool.getFree( serverData, maxUseRate, 1.5 * heartbeatTime, timestamp, [], replicaCount ); // 新选几台服务器
+    serverList = serverdataTool.getFree( serverData, maxUseRate, 1.5 * heartbeatTime, timestamp, [], replicaCount );
     primary = serverList[timestamp % replicaCount];
     version = 1;
     let isNew = 1;
     result = await lauchOrder.grantLease( waitleaseData, chunkName, serverList, primary, version, timestamp, isNew );
 
-    // 结果正常，第一个请求者会被选定为执行者
     if( 0 === result.code && result.isRunner ){
-      // B 将新块设置到全局变量中
       lauchOrder.setNewChunk( file2chunkData, chunkData, filePath, chunkName, serverList, primary, version, replicaCount, timestamp );
       result = operationLog.setVersion( timestamp, filePath, chunkName, version, recordPath );
       log.error( Error(), jsons([result]) );
@@ -453,7 +451,6 @@ exports.getWriteServerList = async function( namespaceData, file2chunkData, chun
   else if( index < chunkCount ){
     chunkName = file2chunkTool.getByIndex( file2chunkData, filePath, index );
 
-    // 5 检查chunkName状态是否OK
     let isGood = chunkdataTool.isGood( chunkData, chunkName, timestamp, chunkDeadTime );
     if( !isGood ){
       util.error( result, 'REPLICA_COUNT_LESS', `${filePath}, ${chunkName}` );
@@ -461,24 +458,20 @@ exports.getWriteServerList = async function( namespaceData, file2chunkData, chun
       return [result];
     }
 
-    // 6 判断是否存在primary
     serverList = chunkdataTool.getServerList( chunkData, chunkName, heartbeatTime, timestamp );
     primary = chunkdataTool.getPrimary( chunkData, chunkName, heartbeatTime, timestamp );
     version = chunkdataTool.getVersion( chunkData, chunkName );
 
     if(!primary){
-      // 预选primary
       primary = serverList[timestamp % replicaCount];
       version += 1;
       let isNew = 0;
-      // 通知新候选pair和新的租约版本号，通知给所有副本
       result = await lauchOrder.grantLease( waitleaseData, chunkName, serverList, primary, version, timestamp, isNew );
 
-      // 结果正常，并且被队列选定为执行者
       if( 0 === result.code && result.isRunner ){
         chunkdataTool.setPrimary( chunkData, chunkName, primary, timestamp );
-        chunkdataTool.setVersion( chunkData, chunkName, version ); /* 写入内存 */
-        result = operationLog.setVersion( timestamp, filePath, chunkName, version, recordPath ); /* 写入日志 */
+        chunkdataTool.setVersion( chunkData, chunkName, version );
+        result = operationLog.setVersion( timestamp, filePath, chunkName, version, recordPath );
         log.error( Error(), jsons([result]) );
         if(0 != result.code){ return [result]; }
       }
@@ -515,14 +508,13 @@ exports.getWriteServerList = async function( namespaceData, file2chunkData, chun
  * @chunkDeadTime  {Number} chunk is damage after the time, @example 7200000
  * @lockDuration   {Number} lock duration, @example 300000
  * @recordPath     {String} path of operate record, @example "C:\work\GFS2\AppData\master\operation.log"
- * @return         {Array}  Return value, @example [{"code":0,"msg":"","data":{"version":1,"primary":"127.0.0.1:3001","serverList":["127.0.0.1:3001","127.0.0.1:3002","127.0.0.1:3003"]}}]
+ * @return         {Array}  return value, @example [{"code":0,"msg":"","data":{"version":1,"primary":"127.0.0.1:3001","serverList":["127.0.0.1:3001","127.0.0.1:3002","127.0.0.1:3003"]}}]
  */
 exports.getAppendServerList = async function( namespaceData, chunkData, chunkfullData, file2chunkData, serverData, waitleaseData, filePath, fd, maxUseRate, timestamp, heartbeatTime, chunkDeadTime, lockDuration, recordPath ){
 // START
   log.args( Error(), arguments );
   let result = {};
 
-  // 1 判断文件是否存在
   if( !namespaceTool.hasPath( namespaceData, filePath ) ){
     util.error( result, 'NOT_EXISTS', `filePath is not exists, ${filePath}`);
     log.error( Error(), jsons([result]) );
@@ -537,27 +529,20 @@ exports.getAppendServerList = async function( namespaceData, chunkData, chunkful
     return [result];
   }
 
-  // 3 获取最后一个快
   let chunkName = file2chunkTool.getLastChunkName( file2chunkData, filePath );
   let replicaCount = chunkdataTool.getReplicaCount( chunkData, chunkName );
   let primary, serverList, version, isNew;
 
-  // 4 判断最后块是否可以继续使用
-  /* 块已满，无法继续使用，需要创建新块 */
   if( chunkfullTool.isFull( chunkfullData, chunkName ) ){
-    // A 先选择块服务器，并选择primary，然后向块服务器推送块租约(因为是新块，所以块服务器也要创建块)
     chunkName = chunkdataTool.getNewChunkName( chunkData );
-    serverList = serverdataTool.getFree( serverData, maxUseRate, 1.5 * heartbeatTime, timestamp, [], replicaCount ); // 新选几台服务器
+    serverList = serverdataTool.getFree( serverData, maxUseRate, 1.5 * heartbeatTime, timestamp, [], replicaCount );
     primary = serverList[timestamp % replicaCount];
     version = 1;
     isNew = 1;
     result = await lauchOrder.grantLease( waitleaseData, chunkName, serverList, primary, version, timestamp, isNew );
 
-    // 结果正常，并且被队列选定为执行者
     if( 0 === result.code && result.isRunner ){
-      // B 将新块设置到全局变量中
       lauchOrder.setNewChunk( file2chunkData, chunkData, filePath, chunkName, serverList, primary, version, replicaCount, timestamp );
-      // C 写入操作日志
       result = operationLog.setVersion( timestamp, filePath, chunkName, version, recordPath );
       if (0 != result.code ){
         log.error( Error(), jsons([result]) );
@@ -569,9 +554,7 @@ exports.getAppendServerList = async function( namespaceData, chunkData, chunkful
       return [result];
     }
   }
-  /* 块未满，可以继续使用 */
   else{
-    // A 检查chunkName状态是否OK
     let isGood = chunkdataTool.isGood( chunkData, chunkName, timestamp, chunkDeadTime );
     if( !isGood ){
       util.error( result, 'REPLICA_COUNT_LESS', `${filePath}, ${chunkName}`);
@@ -583,15 +566,12 @@ exports.getAppendServerList = async function( namespaceData, chunkData, chunkful
     primary = chunkdataTool.getPrimary( chunkData, chunkName, heartbeatTime, timestamp );
     version = chunkdataTool.getVersion( chunkData, chunkName );
 
-    // 没有primary
     if(!primary){
-      // A 给块服务器分配新的租约
       primary = serverList[timestamp % replicaCount];
       version++;
       isNew = 0;
       result = await lauchOrder.grantLease( waitleaseData, chunkName, serverList, primary, version, timestamp, isNew );
       if(0 == result.code && result.isRunner){
-        // B 更新Master租约数据
         chunkdataTool.setPrimary( chunkData, chunkName, primary, timestamp );
         chunkdataTool.setVersion( chunkData, chunkName, version );
         result = operationLog.setVersion( timestamp, filePath, chunkName, version, recordPath );
@@ -628,14 +608,13 @@ exports.getAppendServerList = async function( namespaceData, chunkData, chunkful
  * @count          {String} count, @example "3"
  * @timestamp      {Number} time stamp, @example 1602211802872
  * @lockDuration   {Number} lock duration, @example 300000
- * @return         {Array}  Return value, @example [{"code":0,"data":{"3":{"chunkName":"aabbccdd","version":6,"serverList":["127.0.0.1:3001","127.0.0.1:3002","127.0.0.1:3003"]}},"msg":""}]
+ * @return         {Array}  return value, @example [{"code":0,"data":{"3":{"chunkName":"aabbccdd","version":6,"serverList":["127.0.0.1:3001","127.0.0.1:3002","127.0.0.1:3003"]}},"msg":""}]
  */
 exports.getReadServerList = async function( namespaceData, file2chunkData, chunkData, filePath, fd, index, count, timestamp, lockDuration ){
 // START
   log.args( Error(), arguments );
   let result = {};
 
-  // 1 判断文件是否存在
   if( !namespaceTool.hasPath( namespaceData, filePath ) ){
     util.error( result, 'NOT_EXISTS', `filePath is not exists, ${filePath}`);
     log.error( Error(), jsons([result]) );
@@ -650,7 +629,6 @@ exports.getReadServerList = async function( namespaceData, file2chunkData, chunk
     return [result];
   }
 
-  // 2 获取块名称列表
   log.debug( Error(), jsons({file2chunkData, filePath, index, count}) );
   let chunkNameList = file2chunkTool.getByIndexList( file2chunkData, filePath, index, count );
   if( !chunkNameList.length ){
@@ -658,7 +636,6 @@ exports.getReadServerList = async function( namespaceData, file2chunkData, chunk
     return [result];
   }
 
-  // 3 根据块名从chunkData中找出块对应的server列表
   let chunks = [];
   for( const chunkName of chunkNameList ){
     if( chunkName ){
@@ -685,45 +662,37 @@ exports.getReadServerList = async function( namespaceData, file2chunkData, chunk
  * @namespaceData {JSON}   tree of namespace, @example {"/usr/data/001":["aabbccdd"]}
  * @filePath      {String} file path of system, @example "/usr/data/1.txt"
  * @recordPath    {String} path of operate record, @example "C:\work\GFS2\AppData\master\namespace.rec"
- * @return        {Array}  返回值, @example [{"code":0}, ""]
+ * @return        {Array}  return value, @example [{"code":0}, ""]
  */
 exports.snapshot = async function( namespaceData, filePath, recordPath ){
 // START
   // let result = {}, res = {};
 
-  // // 判断文件命名空间是否存在
   // if(!namespaceData[filePath]){
   //   [result.code, result.msg] = [-1, `Error: ${filePath} is not exists`];
   //   return [result];
   // }
 
-  // // 判断文件是否加了快照锁
   // res = lockdataTool.isLock(lockData, filePath, 'snapshot');
   // [result.code, result.msg] = [res.code, res.msg];
   // if(0 != result.code) { return [result]; }
 
-  // // 已经被加锁
   // if(res.data.isLock){
   //   [result.code, result.msg] = [-1, `${filePath} SNAPSHOT operation is Lock`];
   //   return [result];
   // }
 
-  // // 对文件加全锁
   // lockdataTool.lockAll(lockData, filePath);
 
-  // // 增加文件chunk块的引用计数
   // let chunkNameList = namespaceData[filePath];
 
-  // // 保留快照操作记录
   // [res.code, res.msg] = operationLog.snapshot(filePath, recordPath);
   // [result.code, result.msg] = [res.code, res.msg];
   // if(0 != result.code){ return [result]; }
 
-  // // 在命名空间中创建快照项
   // let {snapshotName} = res.data;
   // namespaceData[snapshotName] = Array.from(chunkNameList);
 
-  // // 解除所有锁
   // lockdataTool.unlockAll(lockData, filePath);
 
   // return [result];

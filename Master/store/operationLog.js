@@ -51,18 +51,18 @@ const {
  * @chunkData              {JSON}   base info of all chunk on local, @example {}
  * @retainTime             {Number} retain time after deleted, @example 259200000
  * @recordPath             {String} path of operate record, @example "C:\work\GFS2\AppData\master\operation.log"
- * @return                 {Array}  返回值, @example [0, '', {"/usr/data/photo/123":{"tm":1563783096855,"chunks":["aabbcdd","eeffgghh"]}}]
+ * @return                 {Array}  return value, @example [0, '', {"/usr/data/photo/123":{"tm":1563783096855,"chunks":["aabbcdd","eeffgghh"]}}]
  */
 exports.load = function( namespaceData, namespaceDeleteData, namespaceSnapshotData, file2chunkData, file2chunkDeleteData, file2chunkSnapshotData, chunkData, retainTime, recordPath ){
 // START
-  // 1 读取操作记录文件
+  // 1 read record
   let code, msg, content;
   [code, msg, content] = utilfs.readSync(recordPath);
   if(0 != code){ return [code, msg, content]; }
 
   content = (content || Buffer.from('')).toString();
 
-  // 2 解析每行记录
+  // 2 parse
   let lines = content.split(/\r|\n/);
   for(let line of lines){
 
@@ -76,73 +76,59 @@ exports.load = function( namespaceData, namespaceDeleteData, namespaceSnapshotDa
     filePath = utilfs.formatFilePath(filePath);
 
     if('cd' === opType){
-      // 创建命名空间
       namespaceTool.add(namespaceData, filePath, 'dir');
     }
     else if('cf' === opType){
-      // 创建命名空间
       namespaceTool.add(namespaceData, filePath, 'file');
     }
     else if('v' === opType){
       let [chunkName, version] = more[0].split(',');
       version = parseInt(version);
       file2chunkTool.add(file2chunkData, filePath, chunkName);
-      // 插入块，初始版本1
+      // first version is 1
       if( !chunkdataTool.has(chunkData, chunkName) && 1 == version ){
         chunkdataTool.add(chunkData, chunkName, version, 3);
       }
-      // 存在的块，分配更高版本
       else if( chunkdataTool.has(chunkData, chunkName) && 1 < version ){
         chunkdataTool.setVersion(chunkData, chunkName, version);
       }
     }
     else if('snapshot' === opType){
-      // 存入命名空间快照对象
       let tree = namespaceTool.clone(namespaceData, filePath);
       namespaceSnapshotTool.add(namespaceSnapshotData, filePath, tm, tree);
 
-      // 获取需要快照的文件列表
       let filePathList = namespaceTool.getFilePathList(tree);
 
       for(const filePath of filePathList){
-        // 返回文件路径的对应的块名称列表
         let chunkNameList = file2chunkTool.get(file2chunkData, filePath);
-        // 将文件名对应的块列表信息，添加到映射快照数据中
         file2chunkSnapshotTool.add(file2chunkSnapshotData, filePath, tm, chunkNameList);
 
-        // 块数据中增加引用计数
         for(const chunkName of chunkNameList){
           chunkdataTool.addReferCount(chunkData, chunkName);
         }
       }
     }
     else if('dd' === opType || 'df' == opType){
-      // 清空删除命名空间中的过期内容
       let expireList = namespaceDeleteTool.getExpireList(namespaceDeleteData, retainTime, tm);
       namespaceDeleteTool.delete(namespaceDeleteData, expireList);
 
-      // 删除命名空间
       // clog(namespaceData);
       let tree = namespaceTool.clone(namespaceData, filePath);
       namespaceTool.delete(namespaceData, filePath);
       // clog(namespaceData);
 
-      // 移入删除的命名空间中
       // clog(namespaceDeleteData);
       namespaceDeleteTool.add(namespaceDeleteData, filePath, tm, tree);
       // clog(namespaceDeleteData);
 
-      // 删除文件到块映射
       // clog(file2chunkData);
       let chunkNameList = file2chunkTool.delete(file2chunkData, filePath);
       // clog(file2chunkData);
 
-      // 移入到文件到块映射
       // clog(file2chunkDeleteData);
       file2chunkDeleteTool.add(file2chunkDeleteData, filePath, chunkNameList, tm);
       // clog(file2chunkDeleteData);
 
-      // 减少引用计数
       if( chunkNameList && chunkNameList.length ){
         for(const chunkName of chunkNameList){
           chunkdataTool.subReferCount(chunkData, chunkName);
@@ -209,7 +195,7 @@ exports.createFile = function( timestamp, filePath, replicaCount, recordPath ){
  * @filePath   {String} file path of system, @example "/usr/data/001"
  * @opType     {String} operate type, 'cd', 'cf', 'dd', 'df', 'w', 'a', 'd', 'snapshot', @example "dd"
  * @recordPath {String} path of operate record, @example "C:\work\GFS2\AppData\master\operation.log"
- * @return     {JSON}   返回值, @example {"code":0,"msg":""}
+ * @return     {JSON}   return value, @example {"code":0,"msg":""}
  */
 exports.delete = function( timestamp, filePath, opType, recordPath ){
 // START
@@ -284,7 +270,6 @@ exports._save = function( timestamp, opType, filePath, more, recordPath ){
 // START
   let result = {};
 
-  // 准备日志文件路径
   if(!fs.existsSync(recordPath)){
     [result.code, result.message] = [-1, `ERROR: Operate record file ${recordPath} is not exists!`];
     return result;

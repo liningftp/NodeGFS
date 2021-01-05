@@ -49,7 +49,7 @@ const emptyFile = {
  * @namespaceData {JSON}   tree of namespace, @example {}
  * @filePath      {String} file path of system, @example "/usr/data/001"
  * @fileType      {String} file type, @example "file"
- * @return        {JSON}   返回值, @example {}
+ * @return        {JSON}   return value, @example {}
  */
 exports.add = function( namespaceData, filePath, fileType ){
 // START
@@ -61,7 +61,6 @@ exports.add = function( namespaceData, filePath, fileType ){
 
   let arr = utilstr.splitPath(filePath);
 
-  // 剥离出最后一项
   let lastItem = arr.splice(-1);
 
   let data = namespaceData;
@@ -89,7 +88,7 @@ exports.add = function( namespaceData, filePath, fileType ){
  * clone the part namespace of file path
  * @namespaceData {JSON}   tree of namespace, @example {"/usr":{"_type":"dir","_lock":{"r":[],"w":[]},"/data":{"_type":"dir","_lock":{"r":[],"w":[]},"/001":{"_type":"file","_replicaCount":3,"_lock":{"r":[],"w":[]}}}}}
  * @filePath      {String} file path of system, @example "/usr/data/001"
- * @return        {JSON}   返回值, @example {}
+ * @return        {JSON}   return value, @example {}
  */
 exports.clone = function( namespaceData, filePath ){
 // START
@@ -109,12 +108,11 @@ exports.clone = function( namespaceData, filePath ){
 
   let arr = utilstr.splitPath(filePath);
 
-  // 剥离出最后一项
   let lastItem = arr.splice(-1);
 
   let data = namespaceData;
   for(const p of arr){
-    data = data[p]; // 跟着空溜圈
+    data = data[p];
     _tree = _tree[p] = Object.assign({}, emptyDir);
   }
 
@@ -132,7 +130,7 @@ exports.clone = function( namespaceData, filePath ){
  * delete file path
  * @namespaceData {JSON}   tree of namespace, @example {"/usr":{"_type":"dir","_lock":{},"/data":{"_type":"dir","_lock":{},"/001":{"_type":"file","_replicaCount":3,"_lock":{}}}}}
  * @filePath      {String} file path of system, @example "/usr/data/001/xx/yy"
- * @return        {JSON}   返回值, @example {}
+ * @return        {JSON}   return value, @example {}
  */
 exports.delete = function( namespaceData, filePath ){
 // START
@@ -144,7 +142,6 @@ exports.delete = function( namespaceData, filePath ){
 
   let arr = utilstr.splitPath(filePath);
 
-  // 剥离出最后一项
   let lastItem = arr.splice(-1);
 
   let data = namespaceData;
@@ -172,7 +169,7 @@ exports.delete = function( namespaceData, filePath ){
  * has path or not
  * @namespaceData {JSON}   tree of namespace, @example {"/usr":{"_type":"dir","_lock":{},"/data":{"_type":"dir","_lock":{},"/001":{"_type":"file","_replicaCount":3,"_lock":{}}}}}
  * @filePath      {String} file path of system, @example "/usr/data/001"
- * @return        {Number} 返回值, @example 1
+ * @return        {Number} return value, @example 1
  */
 exports.hasPath = function( namespaceData, filePath ){
 // START
@@ -210,7 +207,7 @@ exports.hasPath = function( namespaceData, filePath ){
  * get chunk replica count
  * @namespaceData {JSON}   tree of namespace, @example {"/usr":{"_type":"dir","_lock":{"r":[],"w":[]},"/data":{"_type":"dir","_lock":{"r":[],"w":[]},"/001":{"_type":"file","_replicaCount":3,"_lock":{"r":[],"w":[]}}}}}
  * @filePath      {String} file path of system, @example "/usr/data/001"
- * @return        {Number} 返回值, @example 3
+ * @return        {Number} return value, @example 3
  */
 exports.getReplicaCount = function( namespaceData, filePath ){
 // START
@@ -224,7 +221,6 @@ exports.getReplicaCount = function( namespaceData, filePath ){
 
   let arr = utilstr.splitPath(filePath);
 
-  // 剥离出最后一项
   let lastItem = arr.splice(-1);
 
   let data = namespaceData;
@@ -251,7 +247,7 @@ exports.getReplicaCount = function( namespaceData, filePath ){
 /**
  * get list of file path from namespace
  * @namespaceData {JSON}  tree of namespace, @example {"/usr":{"_type":"dir","_lock":{},"/data":{"_type":"dir","_lock":{},"/001":{"_type":"file","_replicaCount":3,"_lock":{}},"/002":{"_type":"file","_replicaCount":3,"_lock":{}}},"/etc":{"_type":"dir","_lock":{},"/nginx":{"_type":"file","_replicaCount":3,"_lock":{}}}}}
- * @return        {Array} Return value, @example []
+ * @return        {Array} return value, @example []
  */
 exports.getFilePathList = function( namespaceData ){
 // START
@@ -375,7 +371,7 @@ exports.unlock = function( namespaceData, filePath, fd ){
  * @lockType      {String} lock type, "a", "r", "w", "snap", @example "a"
  * @timestamp     {Number} time stamp, @example 1601781089737
  * @lockDuration  {Number} lock duration, @example 300000
- * @return        {Array}  Return value, @example [1, ""]
+ * @return        {Array}  return value, @example [1, ""]
  */
 exports.isLock = function( namespaceData, filePath, lockType, timestamp, lockDuration ){
 // START
@@ -468,7 +464,7 @@ exports.isLock = function( namespaceData, filePath, lockType, timestamp, lockDur
  * @fd            {Number} file describe as timestamp when file is opened, @example 1601781089737
  * @timestamp     {Number} time stamp, @example 1601781089737
  * @lockDuration  {Number} lock duration, @example 300000
- * @return        {Number} Return value, @example 1
+ * @return        {Number} return value, @example 1
  */
 exports.hasAuth = function( namespaceData, filePath, fd, timestamp, lockDuration ){
 // START
@@ -535,7 +531,7 @@ exports._clearLock = function( treeData, filePath, timestamp, lockDuration ){
  * find max fd of tree data
  * @treeData {JSON}   tree node data, @example {"/usr":{"_type":"dir","_lock":{"r":[1600676278653],"w":[1606179635164],"snap":[]},"/000":{"_type":"file","_replicaCount":3,"_lock":{"r":[1600676278653],"w":[],"a":[],"snap":[]}}}}
  * @filePath {String} file path of system, @example "/usr/000"
- * @return   {Number} Return value, @example 1606179635164
+ * @return   {Number} return value, @example 1606179635164
  */
 exports._findMaxFD = function( treeData, filePath ){
 // START
@@ -545,7 +541,7 @@ exports._findMaxFD = function( treeData, filePath ){
   let data = treeData;
   let arr = utilstr.splitPath( filePath );
 
-  /* 清除data中的指定锁 */
+  /* clear lock */
   for( const name of arr ){
     data = data[name];
     for( const lockType in data._lock ){
@@ -565,7 +561,7 @@ exports._findMaxFD = function( treeData, filePath ){
 /**
  * copy tree data
  * @src    {JSON} source tree, @example {"/usr":{"_type":"dir","_lock":{"r":[1600765363449,1600765377526],"w":[]},"/data":{"_type":"dir","_lock":{"r":[1600765363449,1600765377526],"w":[]},"/001":{"_type":"file","_replicaCount":3,"_lock":{"r":[],"w":[1600765363449]}}}}}
- * @return {JSON} 返回值, @example {}
+ * @return {JSON} return value, @example {}
  */
 exports._copy = function( src ){
 // START

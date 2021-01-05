@@ -1,18 +1,20 @@
 
+const path = require('path');
+
 const {rimraf} = require('../base');
 
 
 let pathList = [
-  'C:\\work\\GFS2\\AppData\\master\\*',
-  'C:\\work\\GFS2\\AppData\\chunkserver\\*',
-  'C:\\work\\GFS2\\AppData\\test\\output\\*',
-  'C:\\work\\GFS2\\AppData\\test\\result.txt',
-  'C:\\work\\GFS2\\AppData\\test\\error.txt',
+  path.join( __dirname, '../AppData/master/*' ),
+  path.join( __dirname, '../AppData/chunkserver/*' ),
+  path.join( __dirname, '../AppData/test/output/*' ),
+  path.join( __dirname, '../AppData/test/result.txt' ),
+  path.join( __dirname, '../AppData/test/error.txt' ),
 ];
 
 let logList = [
-  'C:\\work\\GFS2\\AppData\\master\\log.log',
-  'C:\\work\\GFS2\\AppData\\chunkserver\\log*.log',
+  path.join( __dirname, '../AppData/master/log.log' ),
+  path.join( __dirname, '../AppData/chunkserver/log*.log' ),
 ];
 
 

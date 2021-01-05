@@ -26,7 +26,7 @@ const {clog, log, jsons} = require('../../../base');
  * @startupData     {JSON}   data of Master startup, @example {"startTime":1}
  * @startTime       {Number} start time of Master server, @example 1593783888581
  * @serverChecklist {Array}  white list of chunkserver, @example ["127.0.0.1:3001", "127.0.0.1:3002", "127.0.0.1:3003"]
- * @return          {JSON}   返回值, @example {}
+ * @return          {JSON}   return value, @example {}
  */
 exports.init = function( startupData, startTime, serverChecklist ){
 // START
@@ -67,8 +67,8 @@ exports.getState = function( startupData, timestamp, heartbeatTime ){
 // PUBLIC_METHOD_START [getTime]
 /**
  * get startup time
- * @startupData {JSON}   data of Master startup, @example {"startTime":1593783888581}
- * @return      {Number} 返回值, @example Master最近的启动时间
+ * @startupData {JSON}  data of Master startup, @example {"startTime":1593783888581}
+ * @return      {Array} return value, @example master latest start time
  */
 exports.getTime = function( startupData ){
 // START
@@ -83,7 +83,7 @@ exports.getTime = function( startupData ){
  * check start time of master and chunkserver is consistent
  * @startupData {JSON}   data of Master startup, @example {"startTime":1593783888581}
  * @startTime   {Number} start time of Master server, @example 1593783888581
- * @return      {Number} 返回值, @example 1
+ * @return      {Number} return value, @example 1
  */
 exports.checkTime = function( startupData, startTime ){
 // START

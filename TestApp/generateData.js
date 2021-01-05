@@ -1,6 +1,4 @@
 
-// 生成测试数据
-
 const fs = require('fs');
 const path = require('path');
 

@@ -1,7 +1,8 @@
 
-// 启动数据
+// store master startup data
+
 var metaData = {
-	'startTime': 0 // Master启动时间戳（毫秒）
+	'startTime': 0 // master start time
 };
 
 

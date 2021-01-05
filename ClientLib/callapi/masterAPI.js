@@ -15,7 +15,7 @@
 
 // REQUIRE_START [default]
 // START
-const {comm, clog, utilarray, utilfs} = require('../../base');
+const {comm, clog, utilfs} = require('../../base');
 // END
 // REQUIRE_END
 
@@ -28,7 +28,7 @@ const {comm, clog, utilarray, utilfs} = require('../../base');
  * @mode       {String} type mode, O_APPEND whe flags is O_RDWR, @example "O_APPEND"
  * @masterHost {String} host of Master server, @example "127.0.0.1"
  * @masterPort {Number} port of Master server, @example 3000
- * @return     {Array}  Return value, @example [{"code":0, "data":{"fd":3}, "msg":""}]
+ * @return     {Array}  return value, @example [{"code":0, "data":{"fd":3}, "msg":""}]
  */
 exports.open = async function( filePath, flags, mode, masterHost, masterPort ){
 // START
@@ -38,7 +38,7 @@ exports.open = async function( filePath, flags, mode, masterHost, masterPort ){
 
   // SOCKET_API OPEN [GFS2_Master.handler.open] {tabCount=1}
   /* open file */
-  /* @return {Array} 返回值 [{"code":0, "data":{"fd":3}, "msg":""}] */
+  /* @return {Array} return value [{"code":0, "data":{"fd":3}, "msg":""}] */
   [result, bigData] = await comm.clientRequest(host, port, 
     comm.encodeMessageData({
       "method": "open",
@@ -62,7 +62,7 @@ exports.open = async function( filePath, flags, mode, masterHost, masterPort ){
  * @fd         {Number} file describe as timestamp when file is opened, @example 1606102127166
  * @masterHost {String} host of Master server, @example "127.0.0.1"
  * @masterPort {Number} port of Master server, @example 3000
- * @return     {Array}  Return value, @example [{"code":0, "msg":""}]
+ * @return     {Array}  return value, @example [{"code":0, "msg":""}]
  */
 exports.close = async function( filePath, fd, masterHost, masterPort ){
 // START
@@ -72,7 +72,7 @@ exports.close = async function( filePath, fd, masterHost, masterPort ){
 
   // SOCKET_API OPEN [GFS2_Master.handler.close] {tabCount=1}
   /* close file */
-  /* @return {Array} 返回值 [{"code":0, "msg":""}] */
+  /* @return {Array} return value [{"code":0, "msg":""}] */
   [result, bigData] = await comm.clientRequest(host, port, 
     comm.encodeMessageData({
       "method": "close",
@@ -94,7 +94,7 @@ exports.close = async function( filePath, fd, masterHost, masterPort ){
  * @filePath   {String} file path of system, @example "/use/data"
  * @masterHost {String} host of Master server, @example "127.0.0.1"
  * @masterPort {Number} port of Master server, @example 3000
- * @return     {Array}  Return value, @example [{"code":0, "msg":""}]
+ * @return     {Array}  return value, @example [{"code":0, "msg":""}]
  */
 exports.createDir = async function( filePath, masterHost, masterPort ){
 // START
@@ -103,7 +103,7 @@ exports.createDir = async function( filePath, masterHost, masterPort ){
   let [host, port] = [masterHost, masterPort];
   // SOCKET_API OPEN [GFS2_Master.handler.createDir] {tabCount=1}
   /* create namespace directory */
-  /* @return {Array} 返回值 [{"code":0, "msg":""}] */
+  /* @return {Array} return value [{"code":0, "msg":""}] */
   [result, bigData] = await comm.clientRequest(host, port, 
     comm.encodeMessageData({
       "method": "createDir",
@@ -125,7 +125,7 @@ exports.createDir = async function( filePath, masterHost, masterPort ){
  * @fd         {Number} file describe as timestamp when file is opened, @example 1606961159937
  * @masterHost {String} host of Master server, @example "127.0.0.1"
  * @masterPort {Number} port of Master server, @example 3000
- * @return     {Array}  Return value, @example [{"code":0, "msg":""}]
+ * @return     {Array}  return value, @example [{"code":0, "msg":""}]
  */
 exports.deleteDir = async function( filePath, fd, masterHost, masterPort ){
 // START
@@ -134,7 +134,7 @@ exports.deleteDir = async function( filePath, fd, masterHost, masterPort ){
   let [host, port] = [masterHost, masterPort];
   // SOCKET_API OPEN [GFS2_Master.handler.deleteDir] {tabCount=1}
   /* delete namespace directory */
-  /* @return {Array} 返回值 [{"code":0, "msg":""}] */
+  /* @return {Array} return value [{"code":0, "msg":""}] */
   [result, bigData] = await comm.clientRequest(host, port, 
     comm.encodeMessageData({
       "method": "deleteDir",
@@ -157,7 +157,7 @@ exports.deleteDir = async function( filePath, fd, masterHost, masterPort ){
  * @replicaCount {Number} count of relipcas, @example 
  * @masterHost   {String} host of Master server, @example "127.0.0.1"
  * @masterPort   {Number} port of Master server, @example 3000
- * @return       {Array}  Return value, @example [{"code":0, "msg":""}]
+ * @return       {Array}  return value, @example [{"code":0, "msg":""}]
  */
 exports.createFile = async function( filePath, replicaCount, masterHost, masterPort ){
 // START
@@ -166,7 +166,7 @@ exports.createFile = async function( filePath, replicaCount, masterHost, masterP
   let [host, port] = [masterHost, masterPort];
   // SOCKET_API OPEN [GFS2_Master.handler.createFile] {tabCount=1}
   /* create namespace file */
-  /* @return {Array} 返回值 [{"code":0, "msg":""}] */
+  /* @return {Array} return value [{"code":0, "msg":""}] */
   [result, bigData] = await comm.clientRequest(host, port, 
     comm.encodeMessageData({
       "method": "createFile",
@@ -189,7 +189,7 @@ exports.createFile = async function( filePath, replicaCount, masterHost, masterP
  * @fd         {Number} file describe as timestamp when file is opened, @example 1606909907287
  * @masterHost {String} host of Master server, @example "127.0.0.1"
  * @masterPort {Number} port of Master server, @example 3000
- * @return     {Array}  Return value, @example [{"code":0, "msg":""}]
+ * @return     {Array}  return value, @example [{"code":0, "msg":""}]
  */
 exports.deleteFile = async function( filePath, fd, masterHost, masterPort ){
 // START
@@ -198,7 +198,7 @@ exports.deleteFile = async function( filePath, fd, masterHost, masterPort ){
   let [host, port] = [masterHost, masterPort];
   // SOCKET_API OPEN [GFS2_Master.handler.deleteFile] {tabCount=1}
   /* delete namespace file */
-  /* @return {Array} 返回值 [{"code":0, "msg":""}] */
+  /* @return {Array} return value [{"code":0, "msg":""}] */
   [result, bigData] = await comm.clientRequest(host, port, 
     comm.encodeMessageData({
       "method": "deleteFile",
@@ -222,7 +222,7 @@ exports.deleteFile = async function( filePath, fd, masterHost, masterPort ){
  * @index      {Number} index of chunk, @example 2
  * @masterHost {String} host of Master server, @example "127.0.0.1"
  * @masterPort {Number} port of Master server, @example 3000
- * @return     {Array}  Return value, @example [{}]
+ * @return     {Array}  return value, @example [{}]
  */
 exports.getWriteServerList = async function( filePath, fd, index, masterHost, masterPort ){
 // START
@@ -230,8 +230,8 @@ exports.getWriteServerList = async function( filePath, fd, index, masterHost, ma
 
   let [host, port] = [masterHost, masterPort];
   // SOCKET_API OPEN [GFS2_Master.handler.getWriteServerList] {tabCount=1}
-  /* get list of chunkserver to be appended */
-  /* @return {Array} Return value [{"code":0,"msg":"","data":{"version":1,"primary":"127.0.0.1:3001","serverList":["127.0.0.1:3001","127.0.0.1:3002","127.0.0.1:3003"]}}] */
+  /* get list of chunkserver to write */
+  /* @return {Array} return value [{"code":0,"msg":"","data":{"version":1,"primary":"127.0.0.1:3001","serverList":["127.0.0.1:3001","127.0.0.1:3002","127.0.0.1:3003"]}}] */
   [result, bigData] = await comm.clientRequest(host, port, 
     comm.encodeMessageData({
       "method": "getWriteServerList",
@@ -255,7 +255,7 @@ exports.getWriteServerList = async function( filePath, fd, index, masterHost, ma
  * @fd         {Number} file describe as timestamp when file is opened, @example 1606961159937
  * @masterHost {String} host of Master server, @example "127.0.0.1"
  * @masterPort {Number} port of Master server, @example 3000
- * @return     {Array}  Return value, @example [{}]
+ * @return     {Array}  return value, @example [{}]
  */
 exports.getAppendServerList = async function( filePath, fd, masterHost, masterPort ){
 // START
@@ -263,8 +263,8 @@ exports.getAppendServerList = async function( filePath, fd, masterHost, masterPo
 
   let [host, port] = [masterHost, masterPort];
   // SOCKET_API OPEN [GFS2_Master.handler.getAppendServerList] {tabCount=1}
-  /* 获取记录追加操作的服务器 */
-  /* @return {Array} Return value [{"code":0,"msg":"","data":{"version":1,"primary":"127.0.0.1:3001","serverList":["127.0.0.1:3001","127.0.0.1:3002","127.0.0.1:3003"]}}] */
+  /* get list of chunkserver to append */
+  /* @return {Array} return value [{"code":0,"msg":"","data":{"version":1,"primary":"127.0.0.1:3001","serverList":["127.0.0.1:3001","127.0.0.1:3002","127.0.0.1:3003"]}}] */
   [result, bigData] = await comm.clientRequest(host, port, 
     comm.encodeMessageData({
       "method": "getAppendServerList",
@@ -286,18 +286,17 @@ exports.getAppendServerList = async function( filePath, fd, masterHost, masterPo
  * @filePath   {String} file path of system, @example "/usr/data/001"
  * @fd         {Number} file describe as timestamp when file is opened, @example 1607151913750
  * @index      {Number} index of chunk, @example 1
- * @count      {Number} count, @example 3
  * @masterHost {String} host of Master server, @example "127.0.0.1"
  * @masterPort {Number} port of Master server, @example 3000
  */
-exports.getReadServerList = async function( filePath, fd, index, count, masterHost, masterPort ){
+exports.getReadServerList = async function( filePath, fd, index, masterHost, masterPort ){
 // START
   let result, bigData;
 
   let [host, port] = [masterHost, masterPort];
   // SOCKET_API OPEN [GFS2_Master.handler.getReadServerList] {tabCount=1}
-  /* 获取指定块所属的服务器信息 */
-  /* @return {Array} Return value [{"code":0,"data":{"3":{"chunkName":"aabbccdd","version":6,"serverList":["127.0.0.1:3001","127.0.0.1:3002","127.0.0.1:3003"]}},"msg":""}] */
+  /* get list of chunkserver to read */
+  /* @return {Array} return value [{"code":0,"data":{"3":{"chunkName":"aabbccdd","version":6,"serverList":["127.0.0.1:3001","127.0.0.1:3002","127.0.0.1:3003"]}},"msg":""}] */
   [result, bigData] = await comm.clientRequest(host, port, 
     comm.encodeMessageData({
       "method": "getReadServerList",

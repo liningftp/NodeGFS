@@ -2,35 +2,32 @@
 const fs = require("fs");
 const child_process = require("child_process");
 
-// 后面会重复加载，这里不能使用const声明
-let chunkversionTool = require("C:\\work\\GFS2\\Chunkserver\\metadata\\tool\\chunkversionTool.js");
+let chunkversionTool = require("C:\\work\\Git_work\\NodeGFS\\Chunkserver\\metadata\\tool\\chunkversionTool.js");
 
 
 ////////////////////////////////////////////////////////////////////////////////
 
-// 重新载入模块
 function reload(){
-	delete require.cache[require.resolve("C:\\work\\GFS2\\Chunkserver\\metadata\\tool\\chunkversionTool.js")]
-	chunkversionTool = require("C:\\work\\GFS2\\Chunkserver\\metadata\\tool\\chunkversionTool.js");
+  delete require.cache[require.resolve("C:\\work\\Git_work\\NodeGFS\\Chunkserver\\metadata\\tool\\chunkversionTool.js")]
+  chunkversionTool = require("C:\\work\\Git_work\\NodeGFS\\Chunkserver\\metadata\\tool\\chunkversionTool.js");
 }
 
 
-// 创建子进程服务器端
 async function forkServer(forkFile, startParam){
-	var child = child_process.fork(forkFile);
+  var child = child_process.fork(forkFile);
 
-	return	new Promise( (resolve, reject) => {
-		child.on("message", (result) => {
-			if("onload" == result.state){
-				child.send(startParam);
-			}
-			else if("started" == result.state){
-				resolve(child);
-			}
-			else{
-			}
-		});
-	});
+  return  new Promise( (resolve, reject) => {
+    child.on("message", (result) => {
+      if("onload" == result.state){
+        child.send(startParam);
+      }
+      else if("started" == result.state){
+        resolve(child);
+      }
+      else{
+      }
+    });
+  });
 
 }
 
@@ -40,13 +37,13 @@ async function forkServer(forkFile, startParam){
 // delete chunk
 exports.deleteChunk = function(){
 // START
-	reload();
-	// 执行业务逻辑
-	var chunkversionData = {"aabbccdd":[1,12], "eeffgghh":[0, 20]};
-	var chunkName = "aabbccdd";
-	var result = chunkversionTool.deleteChunk(chunkversionData, chunkName);
+  reload();
+  // run
+  var chunkversionData = {"aabbccdd":[1,12], "eeffgghh":[0, 20]};
+  var chunkName = "aabbccdd";
+  var result = chunkversionTool.deleteChunk(chunkversionData, chunkName);
 
-	return result;
+  return result;
 // END
 };
 
@@ -54,15 +51,15 @@ exports.deleteChunk = function(){
 // add new chunk
 exports.addChunk = function(){
 // START
-	reload();
-	// 执行业务逻辑
-	var chunkversionData = {};
-	var chunkName = "ab83e19265655130b208def31e0c483ecb835a24a9a7508eaec0df0e62e65870";
-	var version = 3;
-	var itemIndex = 1;
-	var result = chunkversionTool.addChunk(chunkversionData, chunkName, version, itemIndex);
+  reload();
+  // run
+  var chunkversionData = {};
+  var chunkName = "ab83e19265655130b208def31e0c483ecb835a24a9a7508eaec0df0e62e65870";
+  var version = 3;
+  var itemIndex = 1;
+  var result = chunkversionTool.addChunk(chunkversionData, chunkName, version, itemIndex);
 
-	return result;
+  return result;
 // END
 };
 
@@ -70,13 +67,13 @@ exports.addChunk = function(){
 // get chunk version
 exports.getVersion = function(){
 // START
-	reload();
-	// 执行业务逻辑
-	var chunkversionData = {"aabbccdd":[1,12], "eeffgghh":[2, 20]};
-	var chunkName = "aabbccdd";
-	var result = chunkversionTool.getVersion(chunkversionData, chunkName);
+  reload();
+  // run
+  var chunkversionData = {"aabbccdd":[1,12], "eeffgghh":[2, 20]};
+  var chunkName = "aabbccdd";
+  var result = chunkversionTool.getVersion(chunkversionData, chunkName);
 
-	return result;
+  return result;
 // END
 };
 
@@ -84,14 +81,14 @@ exports.getVersion = function(){
 // set chunk version
 exports.setVersion = function(){
 // START
-	reload();
-	// 执行业务逻辑
-	var chunkversionData = {"aabbccdd":[1,12], "eeffgghh":[0, 20]};
-	var chunkName = "aabbccdd";
-	var version = 60;
-	var result = chunkversionTool.setVersion(chunkversionData, chunkName, version);
+  reload();
+  // run
+  var chunkversionData = {"aabbccdd":[1,12], "eeffgghh":[0, 20]};
+  var chunkName = "aabbccdd";
+  var version = 60;
+  var result = chunkversionTool.setVersion(chunkversionData, chunkName, version);
 
-	return result;
+  return result;
 // END
 };
 
@@ -99,13 +96,13 @@ exports.setVersion = function(){
 // get chunk index
 exports.getChunkIndex = function(){
 // START
-	reload();
-	// 执行业务逻辑
-	var chunkversionData = {"aabbccdd":[1,12], "eeffgghh":[0, 20]};
-	var chunkName = "aabbccdd";
-	var result = chunkversionTool.getChunkIndex(chunkversionData, chunkName);
+  reload();
+  // run
+  var chunkversionData = {"aabbccdd":[1,12], "eeffgghh":[0, 20]};
+  var chunkName = "aabbccdd";
+  var result = chunkversionTool.getChunkIndex(chunkversionData, chunkName);
 
-	return result;
+  return result;
 // END
 };
 
@@ -113,11 +110,11 @@ exports.getChunkIndex = function(){
 // get chunk version count
 exports.getCount = function(){
 // START
-	reload();
-	// 执行业务逻辑
-	var chunkversionData = {"aabbccdd":[1,12], "eeffgghh":[0, 20]};
-	var result = chunkversionTool.getCount(chunkversionData);
+  reload();
+  // run
+  var chunkversionData = {"aabbccdd":[1,12], "eeffgghh":[0, 20]};
+  var result = chunkversionTool.getCount(chunkversionData);
 
-	return result;
+  return result;
 // END
 };
