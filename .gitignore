@@ -1,3 +1,4 @@
+.DS_Store
 AppData/
 base/node_modules/
 base/package-lock.json
