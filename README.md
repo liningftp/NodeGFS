@@ -1,7 +1,6 @@
 
 # NodeGFS
 Implementation of Google File System in NodeJS
-
 <br />
 
 ## API
@@ -56,6 +55,7 @@ for more detail, please view `ClientLib/gfs.js`
 
   read content from file
   <br />
+<br />
 
 ## Quick Test
 
@@ -63,7 +63,7 @@ for more detail, please view `ClientLib/gfs.js`
 
 - download code in your `RootDir` directory. If use many computer, 
 
-  Master computer must has `base`, `Master` directory. for test, we recommend `TestApp` is in Master computer
+  Master computer must has `base`, `Master` directory. For test, we recommend `TestApp` is in Master computer
   
   Chunkserver computer must has `base` and `Chunkserver` directory
   <br />
@@ -140,7 +140,7 @@ for more detail, please view `ClientLib/gfs.js`
   
   the rest do the same
 
-  **NOTICE**: after start Master, please start all Chunkserver in 60s, otherwise Master would think some chunk is lost
+  **NOTICE**: after start Master, please start all Chunkserver in 90s, otherwise Master would think some chunk is lost
   <br />
 
 **Run TestApp**

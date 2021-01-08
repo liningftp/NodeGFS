@@ -50,6 +50,8 @@ const [
   startupdata.get(),
 ];
 
+const chunkserverEnter = {};
+
 
 startupdataTool.init(startupData, START_TIME);
 
@@ -93,6 +95,8 @@ async function response(socket, data){
   if(handler[head.method]){
     let res = {}, bigData, message;
     let timestamp = Date.now();
+
+    handleEnter( head.method, head.pair, timestamp );
     
     let state = startupdataTool.getState( startupData, timestamp, heartbeatTime );
     /* Master init */
@@ -147,6 +151,74 @@ comm.createServer( masterHost, masterPort, {
     console.log(err);
   }
 });
+
+
+function handleEnter( method, pair, timestamp ){
+  let remainCount = 10;
+  let m = method.toLowerCase().includes('boot') ? 'B' : method.toLowerCase().includes('heart') ? 'H' : '';
+
+  let showTime = function( m, now, tm ){
+    now = parseInt( now );
+    tm = parseInt( tm );
+    let t = ( now - tm ) / 1000;
+    let past = Math.floor( t );
+    let msg = '';
+    if( 0 == t ){
+      msg = `${m}, Right now`;
+    }
+    else{
+      msg = `${m}, Passed ${past}s`;
+    }
+
+    return msg;
+  }
+
+  chunkserverEnter[pair] = chunkserverEnter[pair] || [];
+  chunkserverEnter[pair].push( `${m},${timestamp}` );
+
+  let tableData = [
+    // {
+    //   '127.0.0.1:3001': 'B, passed 30s',
+    //   '127.0.0.1:3002': 'B, passed 30s',
+    //   '127.0.0.1:3003': 'B, passed 30s',
+    // },
+    // {
+    //   '127.0.0.1:3001': 'B, passed 90s',
+    //   '127.0.0.1:3002': '',
+    //   '127.0.0.1:3003': ''
+    // }
+  ];
+
+  let pairs = Object.keys( chunkserverEnter );
+  let maxCount = Math.max( ...pairs.map( pair => chunkserverEnter[pair].length ) );
+
+  for( let i = 0; i < maxCount; i++ ){
+    let line = {};
+    for( const [pair, list] of Object.entries( chunkserverEnter ) ){
+      if( list[i] ){
+        let [m, tm] = list[i].split(',');
+        line[pair] = showTime( m, timestamp, tm );
+      }
+      else{
+        line[pair] = '';
+      }
+    }
+    tableData.push( line );
+  }
+
+  if( remainCount < tableData.length ){
+    tableData.splice( 0, tableData.length - remainCount );
+  }
+
+  console.clear();
+  console.table( tableData );
+}
+
+// handleEnter( 'boot', '127.0.0.1:3001', Date.now() );
+// handleEnter( 'boot', '127.0.0.1:3002', Date.now() );
+// handleEnter( 'boot', '127.0.0.1:3003', Date.now() );
+// handleEnter( 'heart', '127.0.0.1:3001', Date.now() );
+
 
 
 // // simulator test
