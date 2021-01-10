@@ -55,41 +55,42 @@ for more detail, please view `ClientLib/gfs.js`
 
   read content from file
   <br />
-<br />
 
-## Quick Test
+## Simple Test
+
+**Install NodeJS**
+
+- Please make sure that all computers have NodeJS
+- If has not, please visit <a href="https://nodejs.org/en/download/" target="_blank">https://nodejs.org/en/download/</a>, follow the instructions to install
 
 **Get code**
 
-- download code in your `RootDir` directory. If use many computer, 
+- download code in your *`RootDir`* directory. If use many computer, 
 
-  Master computer must has `base`, `Master` directory. For test, we recommend `TestApp` is in Master computer
+  Master computer must has `base`, `Master` directory. For test, we recommend `tests` is in Master computer
   
   Chunkserver computer must has `base` and `Chunkserver` directory
   <br />
 
 - install dependencies, all computer must to do
 
-  enter `RootDir`
+  enter *`RootDir`*
 
       cd base
       npm i
-  <br />
-
 
 **If use one computer**
 
 - start Master
 
-  open a terminal, enter `RootDir`, then
+  open a terminal, enter *`RootDir`*, then
 
       cd Master
       node main.js
-  <br />
 
 - start Chunkserver
 
-  open three terminal, separately enter `RootDir`, then run command in 3 terminal
+  open three terminal, separately enter *`RootDir`*, then run command in 3 terminal
   
   in 1st terminal
 
@@ -106,14 +107,11 @@ for more detail, please view `ClientLib/gfs.js`
       cd Chunkserver
       node main.js -p 3003
 
-  <br />
-
-
 **If use four computers**
 
 - start Master
 
-  select one computer as Master, open a terminal, enter `RootDir`, then
+  select one computer as Master, open a terminal, enter *`RootDir`*, then
 
   edit Master/config.js
 
@@ -123,11 +121,10 @@ for more detail, please view `ClientLib/gfs.js`
 
       cd Master
       node main.js
-  <br />
 
 - start Chunkserver
 
-  other 3 computers as Chunkserver, select one, open a terminal, enter `RootDir`, then
+  other 3 computers as Chunkserver, select one, open a terminal, enter *`RootDir`*, then
 
   edit Chunkserver/config.js 
 
@@ -143,37 +140,49 @@ for more detail, please view `ClientLib/gfs.js`
   **NOTICE**: after start Master, please start all Chunkserver in 90s, otherwise Master would think some chunk is lost
   <br />
 
-**Run TestApp**
+**Run tests**
 
-if has 4 computers, `TestApp` is in Master computer
+if has 4 computers, `tests` is in Master computer
 
-- enter `RootDir`, then
+- enter *`RootDir`*, then
 
-  `cd TestApp`
-  <br />
+  `cd tests`
 
 - create file `/usr/data/001`
 
-  `node api/create.js file /usr/data/001`
-  <br />
+  `node simple/create.js file /usr/data/001`
 
 - write "hello" to `/usr/data/001`
 
-  `node api/write.js /usr/data/001 hello 0`
-  <br />
+  `node simple/write.js /usr/data/001 hello 0`
 
 - append "world" to `/usr/data/001`
 
-  `node api/append.js /usr/data/001 world`
-  <br />
+  `node simple/append.js /usr/data/001 world`
 
 - read "helloworld" from `/usr/data/001`
 
-  `node api/read.js /usr/data/001 0 10`
-  <br />
+  `node simple/read.js /usr/data/001 0 10`
 
 - delete `/usr/data/001`
 
-  `node api/delete.js file /usr/data/001`
+  `node simple/delete.js file /usr/data/001`
   <br />
-  <br />
+
+**View Reuslt**
+
+After run tests, result will be generated in *`RootDir`*/AppData/
+
+`/master/operate.log` - operate log, store the most important metadata
+`/master/log.log` - debug log
+
+`/chunkserver/cache/` - cache push data
+`/chunkserver/checksum/` - chunk checksum
+`/chunkserver/chunk/` - chunk data
+`/chunkserver/version/` - chunk version
+
+<br/>
+
+
+## Bench Test
+
